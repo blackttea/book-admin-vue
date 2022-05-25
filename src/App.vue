@@ -1,25 +1,25 @@
 <template>
-  <div></div>
-  <button @click='loginT'>登录</button>
-  <button @click='registers'>登录</button>
+<!--  <div></div>-->
+<!--  <button @click='loginT'>登录</button>-->
+<!--  <button @click='registers'>登录</button>-->
+  <router-view />
 </template>
 
 <script>
 import { defineComponent } from 'vue';
 import { login, register } from './api/login';
-import { useStore } from 'vuex';
+import { useUserStore } from '@/store/user'
 
 export default defineComponent({
   props: {
     msg: String,
   },
   setup() {
-    const store = useStore()
+    const userStore = useUserStore();
     const loginT = () => {
       console.log('click');
       login({ username: 'admin', password: '123456' }).then((res) => {
-        store.commit('user/setToken', res.data.token)
-        console.log(store.state.user.token);
+        console.log(userStore.token)
       });
     };
 
@@ -28,6 +28,7 @@ export default defineComponent({
 
       })
     }
+
     return {
       loginT,
       registers
