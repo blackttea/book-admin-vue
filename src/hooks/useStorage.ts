@@ -6,11 +6,12 @@
  * @param value 设置值
  * @returns {any}
  */
-const useStorage = (type: string = 'local', operation: string, key='', value='') => {
+
+const useStorage = (type: string = 'local', operation: string, key='', value: any = '') => {
   const storage = type === 'local' ? localStorage : sessionStorage;
   switch (operation) {
     case "get":
-      return JSON.parse(storage.getItem(key) || '');
+      return storage.getItem(key) ? JSON.parse(storage.getItem(key) || '') : '';
     case "set":
       if (typeof key === "string") {
         storage.setItem(key, JSON.stringify(value))

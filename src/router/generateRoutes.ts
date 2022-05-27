@@ -9,12 +9,11 @@ interface menu {
 }
 
 const loadView = (component: string | any) => {
-    return (resolve: any) => require([`@/views/${component}`], resolve)
+    return () => require.ensure([], (require) => require(`@/views/${component}`))
 }
 
 const generateRoutes = (routes: Array<menu>) => {
-    // @ts-ignore
-    const formatRoutesArr = []
+    const formatRoutesArr: Array<any> = []
     routes.forEach(route => {
         const { viewPath, keepAlive, icon, name, router, parentId, id } = route;
         const routers = {
@@ -29,7 +28,6 @@ const generateRoutes = (routes: Array<menu>) => {
         formatRoutesArr.push(routers)
     })
     // 将404页面添加到最后面
-    // @ts-ignore
     return formatRoutesArr
 }
 

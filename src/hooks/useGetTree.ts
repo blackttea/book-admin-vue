@@ -6,7 +6,7 @@ interface tree {
     path: string;
 }
 
-const useGetTree  = (arr: Array<tree>) => {
+const useGetTree = (arr: Array<tree>) => {
     let data = arr.filter(item => {
         item.children = arr.filter(e => {
             return item.id === e.parentId

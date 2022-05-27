@@ -6,12 +6,20 @@ export const useUserStore = defineStore({
     state: () => {
         return {
             token: '',
-            routers: []
+            routers: [],
+            menus: [],
         }
     },
     actions: {
         updateToken(token: string) {
-            this.token = token
+            this.token = token;
+        },
+        clearMenu() {
+            this.menus.length = 0;
+        },
+        getMenu(menu_item: object | Array<object>) {
+            // @ts-ignore
+            this.menus.push(menu_item);
         },
         async login (params: object) {
             return login(params);
