@@ -1,7 +1,7 @@
 <template>
   <div class="login-container">
     <canvas id='myCanvas' ref="canvas"></canvas>
-    <div class="wrapper">
+    <div class="wrapper" :style="{marginTop: -winH + 'px'}">
       <div class="text-y" data-text="2020"></div>
       <div class="text-m" data-text="5-20"></div>
     </div>
@@ -9,7 +9,7 @@
 <!--    <img src="../../assets/images/snow2.png" id="imgs2" style="display:none" />-->
 <!--    <img src="../../assets/images/snow3.png" id="imgs3" style="display:none" />-->
 <!--    <img src="../../assets/images/snow4.png" id="imgs4" style="display:none" />-->
-    <div id="form_box">
+    <div id="form_box" :style="{marginTop: -winH + 200  + 'px'}">
       <a-form ref="form" :model="form" class="login-form" :label-col="{style: {width: '60px'}}">
         <h2 class="login-title">登录</h2>
         <a-form-item label="用户名">
@@ -23,24 +23,37 @@
         </a-form-item>
       </a-form>
     </div>
+    <div :style="{marginTop: -winH + 500+ 'px', width: '100%', height:'500px', overflow: 'auto'}">
+      <test :level="1"></test>
+    </div>
   </div>
 </template>
-<script>
-import {onMounted, ref} from "vue";
+<script lang="ts">
+import {onMounted, Ref, ref} from "vue";
+import test from '../test.vue';
+import register from "../login/register.vue";
+// @ts-ignore
 import snow1 from '@/assets/images/snow1.png';
+// @ts-ignore
 import snow2 from '@/assets/images/snow2.png';
+// @ts-ignore
 import snow3 from '@/assets/images/snow3.png';
+// @ts-ignore
 import snow4 from '@/assets/images/snow4.png';
 
 let canvas;
-let context;
+let context: any;
 let winW;
 let winH;
-let last_snow_created_time;
-let snows = [];
-let back_image;
+let last_snow_created_time: Date;
+let snows: Array<any> = [];
 let tree1;
+
 export default {
+  components: {
+    register,
+    test
+  },
   data() {
     return{
       form:{
@@ -50,16 +63,21 @@ export default {
     }
   },
   setup() {
-    const canvas = ref(null)
+    // @ts-ignore
+    const canvas: Ref<HTMLCanvasElement> = ref(null);
+    const winH = window.innerHeight;
+    const winW = window.innerWidth;
     onMounted(() => {
-      winW = window.innerWidth
-      winH = window.innerHeight
-      last_snow_created_time = new Date()
+      last_snow_created_time = new Date();
+      initCanvas()
+      window.onresize = () => {
+        initCanvas()
+      }
     })
     const initCanvas = () => {
       context = canvas.value.getContext("2d");
-      canvas.width = winW
-      canvas.height = winH
+      canvas.value.width = winW;
+      canvas.value.height = winH;
 
       setInterval(() => {
         drawFrame();
@@ -67,14 +85,13 @@ export default {
     }
     const drawFrame = () =>  {
       setInterval(() => {
-        const index = parseInt(4 * Math.random());
+        const index = Math.floor(4 * Math.random());
         const img = new Image();
         const snow = [snow1, snow2, snow3, snow4];
         img.src = snow[index];
         img.onload = () => {
           createSnow(img)
         }
-        back_image = document.getElementById("imgs" + index);
       }, 500);
       context.clearRect(0,0, winW, winH);
       //  context.drawImage(tree1,0,winH-200,200,200)
@@ -87,8 +104,9 @@ export default {
         }
       })
     }
-    const createSnow = (img) => {
+    const createSnow = (img: any) => {
       let now = new Date()
+      // @ts-ignore
       if (now - last_snow_created_time > snows.length - now.getMinutes() && snows.length < 1500) {
         const radius = Math.random() * 5 + 2;
         let snow = {x: 0, y: 0, radius: radius, color: "",draw: draw,img: img}
@@ -98,7 +116,7 @@ export default {
         last_snow_created_time = now;
       }
     }
-    const draw = (snow) => {
+    const draw = (snow: any) => {
       context.save();
       context.translate(snow.x, snow.y);
       context.lineWidth = snow.lineWidth;
@@ -111,27 +129,15 @@ export default {
       context.restore(); // 这个是动态
     }
     const onSubmit = () => {
-      if(this.form.username === "admin" && this.form.password === "1") {
-        alert("登录成功")
-      }else {
-        alert("您输入的账号密码有误，请重新输入")
-      }
+
     }
     return {
       initCanvas,
       onSubmit,
+      winH,
       canvas
     }
   },
-  mounted() {
-
-    last_snow_created_time = new Date()
-
-    this.initCanvas()
-    window.onresize = () => {
-      this.initCanvas()
-    }
-  }
 }
 </script>
 <style lang="less" scoped>
