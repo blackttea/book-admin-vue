@@ -8,19 +8,19 @@
 <script>
 import { defineComponent } from 'vue';
 import { login, register } from './api/login';
-import { useUserStore } from '@/store/user'
+// import { useUserStore } from '@/store/user'
 
 export default defineComponent({
   props: {
     msg: String,
   },
   setup() {
-    const userStore = useUserStore();
+    // const userStore = useUserStore();
     const loginT = () => {
       console.log('click');
-      login({ username: 'admin', password: '123456' }).then((res) => {
-        console.log(userStore.token)
-      });
+      // login({ username: 'admin', password: '123456' }).then((res) => {
+      //   console.log(userStore.token)
+      // });
     };
 
     const registers = () => {
