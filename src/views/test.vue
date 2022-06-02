@@ -1,6 +1,7 @@
 <script lang="ts">
 import {h, ref, renderSlot, reactive, watch} from 'vue'
 import test1 from './tesst1.vue';
+import ErrorPage from './404.vue';
 
 interface dom {
   id: string,
@@ -8,6 +9,7 @@ interface dom {
   component: any,
   attributes: any,
   text?: any,
+  hidden?: String,
   children?: Array<any>,
   dataList: Array<data>
 }
@@ -141,26 +143,25 @@ export default {
       }
     }
 
-    function evil(fn: any) {
-      const Fn = Function;  //一个变量指向Function，防止有些前端编译工具报错
-      return (new Fn(`() => return ${fn}`))();
-    }
-
     const getAttributes = (attr: any): object =>{
+      const _attr = {};
+      Object.assign(_attr, attr)
       for(let key in attr) {
-        if (dataCenter[attr[key]]) {
-          // Object.assign(attr,{...attr,...{key: }})
-          debugger
-          Object.assign(attr, eval(`{${attr[key]}: ${attr[key] ? dataCenter[attr[key] as keyof typeof dataCenter] : ''}}`) as Object)
-          console.log(eval(`{${attr[key]}: ${attr[key] ? dataCenter[attr[key] as keyof typeof dataCenter] : ''}}`))
-          debugger
+        if (dataCenter.hasOwnProperty(attr[key])) {
+          Object.assign(_attr, {[key]: dataCenter[attr[key]]})
         }
       }
-      return attr
+      return _attr
+    }
+
+    const twBind = () => {
+
     }
     // 重新刷组件属性数据
     const addInput = () => {
-
+      dataCenter['_inputValue'] += '0';
+      dataCenter['_dataSource'].pop();
+      dataCenter['_tableShow'] = !dataCenter['_tableShow']
     }
     let renders: Array<dom> = [
       // {
@@ -182,9 +183,8 @@ export default {
         parent: '',
         component: 'input',
         attributes: {
-          type: 'primary',
           value: '_inputValue',
-          onInput: ($event: any) => {dataCenter.inputValue = $event.target.value}
+          onInput: ($event: any) => {dataCenter['_inputValue'] = $event.target.value}
         },
         text: '_inputValue',
         dataList: [{name: '_inputValue', value: dataCenter1.inputValue}]
@@ -204,7 +204,7 @@ export default {
       {
         id: '10',
         parent: '',
-        component: 'button',
+        component: 'Button',
         attributes: {type: 'primary', onClick: addInput},
         text: '_inputValue',
         dataList: [{name: '_inputValue', value: dataCenter1.inputValue}]
@@ -221,18 +221,33 @@ export default {
         id: '12',
         parent: '',
         component: 'Table',
+        hidden: '_tableShow',
         attributes: {style: {width: '500px'}, dataSource: '_dataSource', columns: '_columns', bordered: true},
         text: '我是小幺7!',
-        dataList: [{name: '_dataSource', value: dataCenter1.dataSource}, {name: '_columns', value: dataCenter1.columns}]
+        dataList: [{name: '_dataSource', value: dataCenter1.dataSource},
+          {name: '_columns', value: dataCenter1.columns},
+          {name: '_tableShow', value: true},
+        ]
+      },
+      {
+        id: '13',
+        parent: '',
+        component: ErrorPage,
+        attributes: {style: {width: '500px'},
+          dataSource: '_dataSource', columns: '_columns', bordered: true, onEditT: (val: any) => {dataCenter['title'] = val},
+          title: 'test'
+        },
+        text: '我是小幺7!',
+        dataList: [{name: '_dataSource', value: dataCenter1.dataSource},
+          {name: '_columns', value: dataCenter1.columns},
+          {name: '_tableShow', value: true},
+        ]
       },
     ]
 
     initDataCenter()
-    console.log(dataCenter)
+
     const result = import('ant-design-vue')
-    watch(() => dataCenter.inputValue, (nVal, oVal) => {
-      console.log(oVal)
-    })
     result.then((res) => {
       const renderTree = (arr: Array<dom>) => {
         let data = arr.filter(item => {
@@ -256,11 +271,11 @@ export default {
           const children = []
           for (let _dom of tree.children)
             children.push(renderList(_dom))
-          return h(dataCenter.module[tree.component as keyof typeof dataCenter.module] || tree.component, getAttributes(tree.attributes),
-            [dataCenter[tree.text as keyof typeof dataCenter] || tree.text, ...children])
+          return !dataCenter[tree.hidden as keyof typeof dataCenter] && h(dataCenter.module[tree.component] || tree.component, getAttributes(tree.attributes),
+            [dataCenter.hasOwnProperty(tree.text) ? dataCenter[tree.text] : tree.text, ...children])
         } else {
-          return h(dataCenter.module[tree.component as keyof typeof dataCenter.module] || tree.component, getAttributes(tree.attributes),
-            dataCenter[tree.text as keyof typeof dataCenter] || tree.text)
+          return !dataCenter[tree.hidden as keyof typeof dataCenter] && h(dataCenter.module[tree.component] || tree.component, getAttributes(tree.attributes),
+            dataCenter.hasOwnProperty(tree.text) ? dataCenter[tree.text] : tree.text)
         }
       }
     }

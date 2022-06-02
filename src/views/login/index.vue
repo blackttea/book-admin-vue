@@ -23,7 +23,7 @@
         </a-form-item>
       </a-form>
     </div>
-    <div :style="{marginTop: -winH + 500+ 'px', width: '100%', height:'500px', overflow: 'auto'}">
+    <div :style="{marginTop: -winH + 100 + 'px', width: '100%', height:'900px', overflow: 'auto'}">
       <test :level="1"></test>
     </div>
   </div>
