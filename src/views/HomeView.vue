@@ -2,6 +2,7 @@
   <div class="home">
     <img alt="Vue logo" src="../assets/logo.png" />
     <div @click="gotoRou">goto login</div>
+    test1
   </div>
 </template>
 

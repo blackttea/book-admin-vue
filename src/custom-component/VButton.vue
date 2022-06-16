@@ -1,11 +1,13 @@
 <template>
-  <button class="v-button">{{ propValue }}</button>
-  <a-carousel :after-change="onChange">
-    <div><h3>1</h3></div>
-    <div><h3>2</h3></div>
-    <div><h3>3</h3></div>
-    <div><h3>4</h3></div>
-  </a-carousel>
+  <div style="width: 100%">
+    <button class="v-button">{{ propValue }}</button>
+    <a-carousel :after-change="onChange">
+      <img src="" alt="">
+      <img src="" alt="">
+      <img src="" alt="">
+      <h1>ces </h1>
+    </a-carousel>
+  </div>
 </template>
 
 <script lang="ts">
@@ -49,7 +51,7 @@ export default {
   transition: .1s;
   font-weight: 500;
   width: 100%;
-  height: 100%;
+  height: 50%;
   font-size: 14px;
 
   &:active {
@@ -63,9 +65,9 @@ export default {
     color: #3a8ee6;
   }
 }
-.ant-carousel :deep(.slick-slide) {
+.ant-carousel {
   text-align: center;
-  height: 160px;
+  height: 50%;
   line-height: 160px;
   background: #364d79;
   overflow: hidden;

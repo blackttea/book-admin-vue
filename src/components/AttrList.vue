@@ -1,7 +1,7 @@
 <!-- TODO: 这个页面后续将用 JSX 重构 -->
 <template>
   <div class="attr-list">
-    <a-form>
+    <a-form :label-col="{style: {width: '50px'}}" style="margin-left: -15px">
       <a-form-item v-for="({key,label}, index) in styleKeys" :key="index" :label="label">
         <a-color-picker v-if="key == 'borderColor'" v-model="curComponent.style[key]"></a-color-picker>
         <a-color-picker v-else-if="key == 'color'" v-model="curComponent.style[key]"></a-color-picker>
@@ -108,8 +108,7 @@ export default {
 <style lang="scss" scoped>
 .attr-list {
   overflow: auto;
-  padding: 20px;
-  padding-top: 0;
+  padding: 0 20px 20px;
   height: 100%;
 }
 </style>

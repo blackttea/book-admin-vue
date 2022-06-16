@@ -29,7 +29,7 @@ const routes: Array<RouteRecordRaw> = [
     path: '/404',
     name: "404",
     component: () =>
-        import(/* webpackChunkName: "about" */ "../views/lowCode/index.vue"),
+        import(/* webpackChunkName: "about" */ "../views/tesst1.vue"),
   },
   {
     path: "/login",

@@ -153,6 +153,7 @@ export default {
 
     .right {
       position: absolute;
+      padding-left: 10px;
       height: 100%;
       width: 262px;
       right: 0;
