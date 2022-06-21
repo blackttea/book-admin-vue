@@ -226,7 +226,7 @@ export default {
   overflow-x: auto;
   background: #fff;
   border-bottom: 1px solid #ddd;
-
+  box-shadow: ;
   .canvas-config {
     display: inline-block;
     margin-left: 10px;

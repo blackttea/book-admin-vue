@@ -4,9 +4,8 @@
     class="editor"
     :class="{ edit: isEdit }"
     :style="{
-            width: changeStyleWithScale(canvasStyleData.width) + 'px',
-            height: changeStyleWithScale(canvasStyleData.height) + 'px',
-        }"
+      width: canvasStyleData.width,
+      height: canvasStyleData.height,}"
     @contextmenu="handleContextMenu"
     @mousedown="handleMouseDown"
   >

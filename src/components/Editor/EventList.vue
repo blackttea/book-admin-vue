@@ -47,7 +47,7 @@
 
 <script>
 import {mapState} from 'vuex'
-import Modal from '@/components/Modal'
+import Modal from '@/components/Editor/Modal'
 import {eventList} from '@/utils/events'
 
 export default {

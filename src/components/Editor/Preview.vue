@@ -2,12 +2,9 @@
   <div v-if="show" class="bg">
     <a-button class="close" @click="close">关闭</a-button>
     <div class="canvas-container">
-      <div
-        class="canvas"
-        :style="{
-                    width: changeStyleWithScale(canvasStyleData.width) + 'px',
-                    height: changeStyleWithScale(canvasStyleData.height) + 'px',
-                }"
+      <div class="canvas"
+        :style="{ width: changeStyleWithScale(canvasStyleData.width) + 'px',
+        height: changeStyleWithScale(canvasStyleData.height) + 'px'}"
       >
         <ComponentWrapper
           v-for="(item, index) in componentData"
@@ -62,13 +59,11 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: auto;
   padding: 20px;
 
   .canvas-container {
-    width: calc(100% - 40px);
-    height: calc(100% - 120px);
-    overflow: auto;
+    width: calc(100% - 10px);
+    height: calc(100% - 60px);
 
     .canvas {
       background: #fff;

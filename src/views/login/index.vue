@@ -5,10 +5,6 @@
       <div class="text-y" data-text="2020"></div>
       <div class="text-m" data-text="5-20"></div>
     </div>
-<!--    <img src="../../../assets/images/snow1.png" id="imgs1" style="display:none" />-->
-<!--    <img src="../../assets/images/snow2.png" id="imgs2" style="display:none" />-->
-<!--    <img src="../../assets/images/snow3.png" id="imgs3" style="display:none" />-->
-<!--    <img src="../../assets/images/snow4.png" id="imgs4" style="display:none" />-->
     <div id="form_box" :style="{marginTop: -winH + 200  + 'px'}">
       <a-form ref="form" :model="form" class="login-form" :label-col="{style: {width: '60px'}}">
         <h2 class="login-title">登录</h2>
@@ -22,9 +18,6 @@
           <a-button type="primary" @click="onSubmit" class="login-button">登录</a-button>
         </a-form-item>
       </a-form>
-    </div>
-    <div :style="{marginTop: -winH + 100 + 'px', width: '100%', height:'900px', overflow: 'auto'}">
-      <test :level="1"></test>
     </div>
   </div>
 </template>
@@ -40,7 +33,7 @@ import snow2 from '@/assets/images/snow2.png';
 import snow3 from '@/assets/images/snow3.png';
 // @ts-ignore
 import snow4 from '@/assets/images/snow4.png';
-
+import bkEditor from "@/components/bkEditor.vue";
 let canvas;
 let context: any;
 let winW;
@@ -52,7 +45,8 @@ let tree1;
 export default {
   components: {
     register,
-    test
+    test,
+    bkEditor
   },
   data() {
     return{
@@ -128,13 +122,15 @@ export default {
       context.fill();
       context.restore(); // 这个是动态
     }
+    const editorValue  = ref('')
     const onSubmit = () => {
-
+      console.log(editorValue.value)
     }
     return {
       initCanvas,
       onSubmit,
       winH,
+      editorValue,
       canvas
     }
   },

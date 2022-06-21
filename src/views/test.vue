@@ -1,6 +1,6 @@
 <script lang="ts">
 import {h, ref, renderSlot, reactive, watch} from 'vue'
-import test1 from './tesst1.vue';
+import test1 from '../components/bkEditor.vue';
 import ErrorPage from './404.vue';
 
 interface dom {

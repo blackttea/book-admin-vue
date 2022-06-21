@@ -1,12 +1,8 @@
-<!-- TODO: 这个页面后续将用 JSX 重构 -->
 <template>
   <div class="attr-list">
     <a-form :label-col="{style: {width: '50px'}}" style="margin-left: -15px">
       <a-form-item v-for="({key,label}, index) in styleKeys" :key="index" :label="label">
-        <a-color-picker v-if="key == 'borderColor'" v-model="curComponent.style[key]"></a-color-picker>
-        <a-color-picker v-else-if="key == 'color'" v-model="curComponent.style[key]"></a-color-picker>
-        <a-color-picker v-else-if="key == 'backgroundColor'" v-model="curComponent.style[key]"></a-color-picker>
-        <a-select v-else-if="selectKey.includes(key)" v-model="curComponent.style[key]">
+        <a-select v-if="selectKey.includes(key)" v-model="curComponent.style[key]">
           <template v-if="key == 'textAlign'">
             <a-option
               v-for="item in textAlignOptions"

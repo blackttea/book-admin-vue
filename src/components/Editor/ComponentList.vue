@@ -35,10 +35,9 @@ export default {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  padding: 10px;
 
   .list {
-    width: 45%;
+    width: 80%;
     border: 1px solid #ddd;
     cursor: grab;
     margin-bottom: 10px;

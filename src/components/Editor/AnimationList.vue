@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import Modal from '@/components/Modal'
+import Modal from '@/components/Editor/Modal'
 import eventBus from '@/utils/eventBus'
 import animationClassData from '@/utils/animationClassData'
 import {mapState} from 'vuex'

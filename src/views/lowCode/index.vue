@@ -41,12 +41,12 @@
 
 <script>
 import Editor from '@/components/Editor/index'
-import ComponentList from '@/components/ComponentList' // 左侧列表组件
-import AttrList from '@/components/AttrList' // 右侧属性列表
-import AnimationList from '@/components/AnimationList' // 右侧动画列表
-import EventList from '@/components/EventList' // 右侧事件列表
+import ComponentList from '@/components/Editor/ComponentList' // 左侧列表组件
+import AttrList from '@/components/Editor/AttrList' // 右侧属性列表
+import AnimationList from '@/components/Editor/AnimationList' // 右侧动画列表
+import EventList from '@/components/Editor/EventList' // 右侧事件列表
 import componentList from '@/custom-component/component-list' // 左侧列表数据
-import Toolbar from '@/components/Toolbar'
+import Toolbar from '@/components/Editor/Toolbar'
 import {deepCopy} from '@/utils/utils'
 import {mapState} from 'vuex'
 import generateID from '@/utils/generateID'
@@ -133,40 +133,37 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="less">
 .home {
   height: 100vh;
   background: #fff;
-
+  padding: 0 30px 30px 30px;
   main {
-    height: calc(100% - 64px);
-    position: relative;
+    height: calc(100% - 50px);
+    box-shadow: 0px 0px 25px #ccc;
+    border-radius: 6px;
+    padding: 20px;
+    display: flex;
+    flex-wrap: nowrap;
 
     .left {
-      position: absolute;
       height: 100%;
-      width: 200px;
-      left: 0;
-      top: 0;
-      padding-top: 10px;
+      width: 100px;
+      overflow-y: auto;
     }
 
     .right {
-      position: absolute;
-      padding-left: 10px;
       height: 100%;
-      width: 262px;
-      right: 0;
-      top: 0;
+      width: 202px;
+      padding-left: 20px;
     }
 
     .center {
-      margin-left: 200px;
-      margin-right: 262px;
-      background: #f5f5f5;
       height: 100%;
+      width: calc(~"100% - 200px");
+      border-bottom: 1px solid #f2f2f2;
+      border-right: 1px solid #f2f2f2;
       overflow: auto;
-      padding: 20px;
 
       .content {
         width: 100%;
@@ -181,4 +178,22 @@ export default {
     color: #333;
   }
 }
+
+/* 滚动条宽高，横向滚动条的高，纵向滚动条的宽 */
+::-webkit-scrollbar {
+  width: 2px;
+  height: 10px;
+}
+
+/* 滚动轨道 */
+::-webkit-scrollbar-track {
+  border-radius: 2px;
+}
+
+/* 滚动条 */
+::-webkit-scrollbar-thumb {
+  background: #cccccc;
+  border-radius: 2px;
+}
+
 </style>

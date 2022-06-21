@@ -1,12 +1,6 @@
 <template>
   <div style="width: 100%">
     <button class="v-button">{{ propValue }}</button>
-    <a-carousel :after-change="onChange">
-      <img src="" alt="">
-      <img src="" alt="">
-      <img src="" alt="">
-      <h1>ces </h1>
-    </a-carousel>
   </div>
 </template>
 
@@ -51,7 +45,7 @@ export default {
   transition: .1s;
   font-weight: 500;
   width: 100%;
-  height: 50%;
+  height: 100%;
   font-size: 14px;
 
   &:active {
@@ -64,16 +58,5 @@ export default {
     background-color: #ecf5ff;
     color: #3a8ee6;
   }
-}
-.ant-carousel {
-  text-align: center;
-  height: 50%;
-  line-height: 160px;
-  background: #364d79;
-  overflow: hidden;
-}
-
-.ant-carousel :deep(.slick-slide h3) {
-  color: #fff;
 }
 </style>
