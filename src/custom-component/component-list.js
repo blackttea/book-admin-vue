@@ -55,6 +55,12 @@ const list = [
       color: '',
       backgroundColor: '',
     },
+    attributes: {
+      value: '_inputValue',
+      onInput: ($event) => {},
+    },
+    text: '_inputValue',
+    dataList: [{name: '_inputValue', value: ''}],
   },
   {
     component: 'Picture',
@@ -66,6 +72,12 @@ const list = [
       height: 200,
       borderRadius: '',
     },
+    attributes: {
+      value: '_inputValue',
+      onInput: ($event) => {},
+    },
+    text: '_inputValue',
+    dataList: [{name: '_inputValue', value: ''}],
   },
   {
     component: 'rect-shape',
@@ -88,6 +100,12 @@ const list = [
       borderRadius: '',
       verticalAlign: 'middle',
     },
+    attributes: {
+      value: '_inputValue',
+      onInput: ($event) => {},
+    },
+    text: '_inputValue',
+    dataList: [{name: '_inputValue', value: ''}],
   },
 ]
 

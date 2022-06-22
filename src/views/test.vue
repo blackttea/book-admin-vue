@@ -8,6 +8,7 @@ interface dom {
   parent: string,
   component: any,
   attributes: any,
+  style?: any,
   text?: any,
   hidden?: String,
   children?: Array<any>,
@@ -143,8 +144,10 @@ export default {
       }
     }
 
-    const getAttributes = (attr: any): object =>{
-      const _attr = {};
+    // 属性
+    const getAttributes = (tree: any): object =>{
+      const _attr = tree?.style ? { style: tree.style } : {};
+      const attr = tree?.attributes ? tree.attributes: {};
       Object.assign(_attr, attr)
       for(let key in attr) {
         if (dataCenter.hasOwnProperty(attr[key])) {
@@ -154,9 +157,6 @@ export default {
       return _attr
     }
 
-    const twBind = () => {
-
-    }
     // 重新刷组件属性数据
     const addInput = () => {
       dataCenter['_inputValue'] += '0';
@@ -181,7 +181,8 @@ export default {
       {
         id: '9',
         parent: '',
-        component: 'input',
+        component: 'Input',
+        style: {width: '500px'},
         attributes: {
           value: '_inputValue',
           onInput: ($event: any) => {dataCenter['_inputValue'] = $event.target.value}
@@ -271,10 +272,10 @@ export default {
           const children = []
           for (let _dom of tree.children)
             children.push(renderList(_dom))
-          return !dataCenter[tree.hidden as keyof typeof dataCenter] && h(dataCenter.module[tree.component] || tree.component, getAttributes(tree.attributes),
+          return !dataCenter[tree.hidden as keyof typeof dataCenter] && h(dataCenter.module[tree.component] || tree.component, getAttributes(tree),
             [dataCenter.hasOwnProperty(tree.text) ? dataCenter[tree.text] : tree.text, ...children])
         } else {
-          return !dataCenter[tree.hidden as keyof typeof dataCenter] && h(dataCenter.module[tree.component] || tree.component, getAttributes(tree.attributes),
+          return !dataCenter[tree.hidden as keyof typeof dataCenter] && h(dataCenter.module[tree.component] || tree.component, getAttributes(tree),
             dataCenter.hasOwnProperty(tree.text) ? dataCenter[tree.text] : tree.text)
         }
       }
