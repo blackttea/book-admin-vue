@@ -151,13 +151,12 @@ export default {
         Object.keys(conditions).forEach(key => {
           // 遍历符合的条件并处理
           conditions[key].forEach((condition) => {
-            if (!condition.isNearly) return
+            if (!condition.isNearly || !condition?.lineNode?.style) return
             // 修改当前组件位移
             this.$store.commit('setShapeSingleStyle', {
               key,
               value: rotate != 0 ? this.translatecurComponentShift(key, condition, curComponentStyle) : condition.dragShift,
             })
-
             condition.lineNode.style[key] = `${condition.lineShift}px`
             needToShow.push(condition.line)
           })

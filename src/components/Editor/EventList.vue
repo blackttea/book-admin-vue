@@ -1,54 +1,14 @@
 <template>
   <div class="event-list">
-    <div class="div-events">
-      <el-button @click="isShowEvent = true">添加事件</el-button>
-      <div>
-        <el-tag
-          v-for="event in Object.keys(curComponent.events)"
-          :key="event"
-          closable
-          @close="removeEvent(event)"
-        >
-          {{ event }}
-        </el-tag>
-      </div>
-    </div>
-
-    <!-- 选择事件 -->
-    <Modal v-model="isShowEvent">
-      <el-tabs v-model="eventActiveName">
-        <a-tab-pane
-          v-for="item in eventList"
-          :key="item.key"
-          :label="item.label"
-          :name="item.key"
-          style="padding: 0 20px;"
-        >
-          <a-input
-            v-if="item.key == 'redirect'"
-            v-model="item.param"
-            type="textarea"
-            placeholder="请输入完整的 URL"
-            @keydown.native.stop
-          />
-          <a-input
-            v-if="item.key == 'alert'"
-            v-model="item.param"
-            type="textarea"
-            placeholder="请输入要 alert 的内容"
-            @keydown.native.stop
-          />
-          <a-button style="margin-top: 20px;" @click="addEvent(item.key, item.param)">确定</a-button>
-        </a-tab-pane>
-      </el-tabs>
-    </Modal>
+    <a-button @click="addEvent">添加</a-button>
   </div>
 </template>
 
-<script>
-import {mapState} from 'vuex'
-import Modal from '@/components/Editor/Modal'
-import {eventList} from '@/utils/events'
+<script lang="ts">
+import {mapState, useStore} from 'vuex';
+import Modal from '@/components/Editor/Modal.vue';
+// @ts-ignore
+import {eventList} from '../../utils/events';
 
 export default {
   components: {Modal},
@@ -60,19 +20,22 @@ export default {
       eventList,
     }
   },
+  setup() {
+    const store = useStore();
+    console.log(store.state.curComponent);
+    // const addEvent = (event: any, param: any) => {
+    //   this.isShowEvent = false
+    //   console.log(this.curComponent)
+    //   this.$store.commit('addEvent', {curComponent(): any {
+    //     }, param})
+    // }
+    // const removeEvent = (event: any) => {
+    //   this.$store.commit('removeEvent', event)
+    // }
+  },
   computed: mapState([
     'curComponent',
-  ]),
-  methods: {
-    addEvent(event, param) {
-      this.isShowEvent = false
-      this.$store.commit('addEvent', {event, param})
-    },
-
-    removeEvent(event) {
-      this.$store.commit('removeEvent', event)
-    },
-  },
+  ])
 }
 </script>
 

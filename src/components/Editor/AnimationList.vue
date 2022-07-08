@@ -18,7 +18,7 @@
 
     <!-- 选择动画 -->
     <Modal v-model="isShowAnimation">
-      <el-tabs v-model="animationActiveName">
+      <a-tabs v-model="animationActiveName">
         <a-tab-pane
           v-for="item in animationClassData"
           :key="item.label"
@@ -40,7 +40,7 @@
             </div>
           </a-scrollbar>
         </a-tab-pane>
-      </el-tabs>
+      </a-tabs>
     </Modal>
     <!-- 编辑动画配置 -->
     <AnimationSettingModal
@@ -58,7 +58,6 @@ import animationClassData from '@/utils/animationClassData'
 import {mapState} from 'vuex'
 import runAnimation from '@/utils/runAnimation'
 import AnimationSettingModal from './AnimationSettingModal.vue'
-
 export default {
   components: {Modal, AnimationSettingModal},
   data() {

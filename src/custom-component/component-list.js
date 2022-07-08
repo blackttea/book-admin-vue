@@ -10,13 +10,17 @@ export const commonAttr = {
   groupStyle: {}, // 当一个组件成为 Group 的子组件时使用
   isLock: false, // 是否锁定组件
 }
+import bkInput from '@/custom-component/bkInput.vue'
+import Picture from '@/custom-component/Picture'
+import RectShape from '@/custom-component/RectShape'
+import VButton from '@/custom-component/VButton'
+import VText from '@/custom-component/VText'
 
 // 编辑器左侧组件列表
 const list = [
   {
-    component: 'v-text',
+    component: VText,
     label: '文字',
-    propValue: '双击编辑文字',
     style: {
       width: 200,
       height: 22,
@@ -26,6 +30,8 @@ const list = [
       letterSpacing: 0,
       textAlign: '',
       color: '',
+      propValue: '双击编辑文字',
+      id: 'test'
     },
     icon: 'wenben',
     attributes: {
@@ -37,13 +43,13 @@ const list = [
   },
   {
     id: 0,
-    component: 'v-button',
+    component: VButton,
     label: '按钮',
     propValue: '按钮',
     icon: 'button',
     style: {
-      width: 100,
-      height: 50,
+      width: '100px',
+      height: '50px',
       borderWidth: 1,
       borderColor: '',
       borderRadius: '',
@@ -58,35 +64,35 @@ const list = [
     attributes: {
       value: '_inputValue',
       onInput: ($event) => {},
+      propValue: '按钮',
     },
-    text: '_inputValue',
+    text: '按钮',
     dataList: [{name: '_inputValue', value: ''}],
   },
   {
-    component: 'Picture',
+    component: Picture,
     label: '图片',
     icon: 'tupian',
-    propValue: require('@/assets/title.jpg'),
     style: {
-      width: 300,
-      height: 200,
+      width: '300px',
+      height: '200px',
       borderRadius: '',
     },
     attributes: {
       value: '_inputValue',
       onInput: ($event) => {},
+      propValue: require('@/assets/title.jpg'),
     },
     text: '_inputValue',
     dataList: [{name: '_inputValue', value: ''}],
   },
   {
-    component: 'rect-shape',
+    component: RectShape,
     label: '矩形',
-    propValue: '&nbsp;',
     icon: 'juxing',
     style: {
-      width: 200,
-      height: 200,
+      width: '200px',
+      height: '200px',
       fontSize: 14,
       fontWeight: 500,
       lineHeight: '',
@@ -103,6 +109,36 @@ const list = [
     attributes: {
       value: '_inputValue',
       onInput: ($event) => {},
+      ref: 'butt_',
+      propValue: '&nbsp;',
+    },
+    text: '_inputValue',
+    dataList: [{name: '_inputValue', value: ''}],
+  },
+  {
+    component: bkInput,
+    label: '输入框',
+    icon: '',
+    style: {
+      width: 200,
+      height:50,
+      fontSize: 14,
+      fontWeight: 500,
+      lineHeight: '',
+      letterSpacing: 0,
+      color: '',
+      borderColor: '#000',
+      borderWidth: 1,
+      backgroundColor: '',
+      borderStyle: 'solid',
+      borderRadius: '',
+      verticalAlign: 'middle',
+    },
+    attributes: {
+      value: '_inputValue',
+      onInput: ($event) => {},
+      ref: 'butt_',
+      propValue: '&nbsp;',
     },
     text: '_inputValue',
     dataList: [{name: '_inputValue', value: ''}],

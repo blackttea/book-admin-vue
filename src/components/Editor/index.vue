@@ -23,26 +23,7 @@
       :index="index"
       :class="{ lock: item.isLock }"
     >
-      <component
-        :is="item.component"
-        v-if="item.component != 'v-text'"
-        :id="'component' + item.id"
-        class="component"
-        :style="getComponentStyle(item.style)"
-        :prop-value="item.propValue"
-        :element="item"
-      />
-
-      <component
-        :is="item.component"
-        v-else
-        :id="'component' + item.id"
-        class="component"
-        :style="getComponentStyle(item.style)"
-        :prop-value="item.propValue"
-        :element="item"
-        @input="handleInput"
-      />
+      <test :cureComponent="item"/>
     </Shape>
     <!-- 右击菜单 -->
     <ContextMenu/>
@@ -73,9 +54,10 @@ import Picture from '@/custom-component/Picture'
 import RectShape from '@/custom-component/RectShape'
 import VButton from '@/custom-component/VButton'
 import VText from '@/custom-component/VText'
-
+import BkInput from '@/custom-component/bkInput';
+import test from '@/views/test'
 export default {
-  components: {Shape, ContextMenu, MarkLine, Area, Grid, Picture, RectShape, VButton, VText},
+  components: {Shape, ContextMenu, MarkLine, Area, Grid, Picture, RectShape, VButton, VText, BkInput, test},
   props: {
     isEdit: {
       type: Boolean,

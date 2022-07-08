@@ -25,10 +25,10 @@
             <AttrList v-if="curComponent"/>
             <p v-else class="placeholder">请选择组件</p>
           </a-tab-pane>
-          <el-tab-pane tab="动画" key="animation">
+          <a-tab-pane tab="动画" key="animation">
             <AnimationList v-if="curComponent"/>
             <p v-else class="placeholder">请选择组件</p>
-          </el-tab-pane>
+          </a-tab-pane>
           <a-tab-pane tab="事件" key="events">
             <EventList v-if="curComponent"/>
             <p v-else class="placeholder">请选择组件</p>

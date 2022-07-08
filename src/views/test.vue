@@ -2,7 +2,7 @@
 import {h, ref, renderSlot, reactive, watch} from 'vue'
 import test1 from '../components/bkEditor.vue';
 import ErrorPage from './404.vue';
-
+import bkInput from '@/custom-component/bkInput.vue'
 interface dom {
   id: string,
   parent: string,
@@ -21,8 +21,13 @@ interface data {
 }
 
 export default {
-  components:{test1},
-  setup(context: any){
+  components:{test1, bkInput},
+  props: {
+    cureComponent: {
+      type: Object
+    }
+  },
+  setup(props:any, context: any ){
     const dataCenter = reactive<any>({
       ren: [],
       r: [],
@@ -163,7 +168,7 @@ export default {
       dataCenter['_dataSource'].pop();
       dataCenter['_tableShow'] = !dataCenter['_tableShow']
     }
-    let renders: Array<dom> = [
+    let renders: Array<dom> = props.cureComponent ? [props.cureComponent] :[
       // {
       //   id: '7',
       //   parent: '',
@@ -245,7 +250,6 @@ export default {
         ]
       },
     ]
-
     initDataCenter()
 
     const result = import('ant-design-vue')
