@@ -255,12 +255,12 @@ export default {
       const result = {};
       ['width', 'height', 'top', 'left', 'rotate'].forEach(attr => {
         if (attr != 'rotate') {
-          result[attr] = style[attr] + 'px'
+          result[attr] = `${style[attr]}`.indexOf('px') < 0 ? style[attr] + 'px' : style[attr]
         } else {
           result.transform = 'rotate(' + style[attr] + 'deg)'
         }
       })
-
+      result['border'] = '3px solid yellow'
       return result
     },
 

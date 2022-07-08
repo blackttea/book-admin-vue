@@ -19,37 +19,14 @@ import VText from '@/custom-component/VText'
 // 编辑器左侧组件列表
 const list = [
   {
-    component: VText,
-    label: '文字',
-    style: {
-      width: 200,
-      height: 22,
-      fontSize: 14,
-      fontWeight: 500,
-      lineHeight: '',
-      letterSpacing: 0,
-      textAlign: '',
-      color: '',
-      propValue: '双击编辑文字',
-      id: 'test'
-    },
-    icon: 'wenben',
-    attributes: {
-      value: '_inputValue',
-      onInput: ($event) => {},
-    },
-    text: '_inputValue',
-    dataList: [{name: '_inputValue', value: ''}],
-  },
-  {
     id: 0,
     component: VButton,
     label: '按钮',
     propValue: '按钮',
     icon: 'button',
     style: {
-      width: '100px',
-      height: '50px',
+      width: 100,
+      height: 50,
       borderWidth: 1,
       borderColor: '',
       borderRadius: '',
@@ -74,8 +51,8 @@ const list = [
     label: '图片',
     icon: 'tupian',
     style: {
-      width: '300px',
-      height: '200px',
+      width: 300,
+      height: 200,
       borderRadius: '',
     },
     attributes: {
@@ -87,38 +64,9 @@ const list = [
     dataList: [{name: '_inputValue', value: ''}],
   },
   {
-    component: RectShape,
-    label: '矩形',
-    icon: 'juxing',
-    style: {
-      width: '200px',
-      height: '200px',
-      fontSize: 14,
-      fontWeight: 500,
-      lineHeight: '',
-      letterSpacing: 0,
-      textAlign: 'center',
-      color: '',
-      borderColor: '#000',
-      borderWidth: 1,
-      backgroundColor: '',
-      borderStyle: 'solid',
-      borderRadius: '',
-      verticalAlign: 'middle',
-    },
-    attributes: {
-      value: '_inputValue',
-      onInput: ($event) => {},
-      ref: 'butt_',
-      propValue: '&nbsp;',
-    },
-    text: '_inputValue',
-    dataList: [{name: '_inputValue', value: ''}],
-  },
-  {
     component: bkInput,
-    label: '输入框',
-    icon: '',
+    label: '输入',
+    icon: 'juxing',
     style: {
       width: 200,
       height:50,
