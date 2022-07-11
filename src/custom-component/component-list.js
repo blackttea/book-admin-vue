@@ -41,6 +41,7 @@ const list = [
     attributes: {
       value: '_inputValue',
       onInput: ($event) => {},
+      onClick: () => { alert('hellow!')},
       propValue: '按钮',
     },
     text: '按钮',
@@ -85,7 +86,6 @@ const list = [
     attributes: {
       value: '_inputValue',
       onInput: ($event) => {},
-      ref: 'butt_',
       propValue: '&nbsp;',
     },
     text: '_inputValue',

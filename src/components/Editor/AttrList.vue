@@ -1,36 +1,10 @@
 <template>
   <div class="attr-list">
-    <a-form :label-col="{style: {width: '50px'}}" style="margin-left: -15px">
-      <a-form-item v-for="({key,label}, index) in styleKeys" :key="index" :label="label">
-        <a-select v-if="selectKey.includes(key)" v-model="curComponent.style[key]">
-          <template v-if="key == 'textAlign'">
-            <a-option
-              v-for="item in textAlignOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            ></a-option>
-          </template>
-          <template v-else-if="key == 'borderStyle'">
-            <a-option
-              v-for="item in borderStyleOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            ></a-option>
-          </template>
-          <template v-else>
-            <a-option
-              v-for="item in verticalAlignOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            ></a-option>
-          </template>
-        </a-select>
-        <a-input v-else v-model.number="curComponent.style[key]" type="number"/>
+    <a-form :label-col="{style: {width: '100%'}}" style="margin-left: -15px;overflow-y: auto" layout="vertical">
+      <a-form-item v-for="({key,label}, index) in styleKeys" :key="index" :label="label" class="form-item">
+        <a-input v-model:value="curComponent.style[key]"/>
       </a-form-item>
-      <a-form-item v-if="curComponent && !excludes.includes(curComponent.component)" label="内容">
+      <a-form-item v-if="curComponent && !excludes.includes(curComponent.component)" label="内容" class="form-item">
         <a-input v-model="curComponent.propValue" type="textarea"/>
       </a-form-item>
     </a-form>
@@ -39,7 +13,9 @@
 
 <script>
 import {styleData} from '@/utils/style'
-
+import { ref } from 'vue';
+import {useStore} from "vuex";
+import useEval from "@/hooks/useEval";
 export default {
   data() {
     return {
@@ -86,6 +62,14 @@ export default {
       styleData,
     }
   },
+  setup (){
+    const addLabel = ref('');
+    const addValue = ref('');
+    return {
+      addLabel,
+      addValue,
+    }
+  },
   computed: {
     styleKeys() {
       if (this.$store.state.curComponent) {
@@ -105,6 +89,12 @@ export default {
 .attr-list {
   overflow: auto;
   padding: 0 20px 20px;
-  height: 100%;
+  .form-item{
+    padding: 10px;
+    box-shadow: 2px 5px 8px rgba(143, 149, 178, 0.15);
+  }
+  .attr-label {
+    padding: 20px 0 20px 0;
+  }
 }
 </style>

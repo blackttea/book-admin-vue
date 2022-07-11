@@ -154,6 +154,7 @@ export default {
 
     .right {
       height: 100%;
+      overflow: auto;
       width: 202px;
       padding-left: 20px;
     }

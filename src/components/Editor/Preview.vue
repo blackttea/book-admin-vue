@@ -3,14 +3,15 @@
     <a-button class="close" @click="close">关闭</a-button>
     <div class="canvas-container">
       <div class="canvas"
-        :style="{ width: changeStyleWithScale(canvasStyleData.width) + 'px',
-        height: changeStyleWithScale(canvasStyleData.height) + 'px'}"
+        :style="{ width: canvasStyleData.width,
+        height: canvasStyleData.height}"
       >
-        <ComponentWrapper
-          v-for="(item, index) in componentData"
-          :key="index"
-          :config="item"
-        />
+<!--        <ComponentWrapper-->
+<!--          v-for="(item, index) in componentData"-->
+<!--          :key="index"-->
+<!--          :config="item"-->
+<!--        />-->
+        <test :cure-component="componentData"/>
       </div>
     </div>
   </div>
@@ -21,9 +22,9 @@ import {getStyle} from '@/utils/style'
 import {mapState} from 'vuex'
 import ComponentWrapper from './ComponentWrapper'
 import {changeStyleWithScale} from '@/utils/translate'
-
+import test from "@/views/test";
 export default {
-  components: {ComponentWrapper},
+  components: {ComponentWrapper, test},
   emits: ['close'],
   props: {
     show: {

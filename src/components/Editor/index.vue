@@ -260,7 +260,6 @@ export default {
           result.transform = 'rotate(' + style[attr] + 'deg)'
         }
       })
-      result['border'] = '3px solid yellow'
       return result
     },
 

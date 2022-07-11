@@ -2,7 +2,9 @@
 import {h, ref, renderSlot, reactive, watch} from 'vue'
 import test1 from '../components/bkEditor.vue';
 import ErrorPage from './404.vue';
-import bkInput from '@/custom-component/bkInput.vue'
+import bkInput from '@/custom-component/bkInput.vue';
+import {useRouter} from "vue-router";
+
 interface dom {
   id: string,
   parent: string,
@@ -28,6 +30,7 @@ export default {
     }
   },
   setup(props:any, context: any ){
+    const router = useRouter();
     const dataCenter = reactive<any>({
       ren: [],
       r: [],
@@ -151,7 +154,11 @@ export default {
 
     // 属性
     const getAttributes = (tree: any): object =>{
-      const _attr = tree?.style ? { style: tree.style } : {};
+      const _attr = tree?.style ? { style: {...tree.style} } : {};
+      _attr.style.width += 'px';
+      _attr.style.height += 'px';
+      _attr.style.left += 'px';
+      _attr.style.right += 'px';
       const attr = tree?.attributes ? tree.attributes: {};
       Object.assign(_attr, attr)
       for(let key in attr) {
@@ -168,7 +175,8 @@ export default {
       dataCenter['_dataSource'].pop();
       dataCenter['_tableShow'] = !dataCenter['_tableShow']
     }
-    let renders: Array<dom> = props.cureComponent ? [props.cureComponent] :[
+    let renders: Array<dom> = props.cureComponent ?
+      (Array.isArray(props.cureComponent) ? props.cureComponent : [props.cureComponent]) :[
       // {
       //   id: '7',
       //   parent: '',
@@ -250,6 +258,7 @@ export default {
         ]
       },
     ]
+    debugger
     initDataCenter()
 
     const result = import('ant-design-vue')
