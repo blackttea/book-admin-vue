@@ -1,13 +1,13 @@
 <template>
   <div style="width: 100%">
-    <button class="v-button">{{ propValue }}</button>
+    <button class="v-button">{{ value }}</button>
   </div>
 </template>
 
 <script lang="ts">
 export default {
   props: {
-    propValue: {
+    value: {
       type: String,
       default: '',
     },

@@ -22,8 +22,17 @@
       :element="item"
       :index="index"
       :class="{ lock: item.isLock }"
+      @drop="handleDrop"
     >
-      <test :cureComponent="item"/>
+      <component
+        :is="item.component"
+        :id="'component' + item.id"
+        class="component"
+        :style="getComponentStyle(item.style)"
+        :prop-value="item.propValue"
+        :element="item"
+        @input="handleInput"
+      />
     </Shape>
     <!-- 右击菜单 -->
     <ContextMenu/>
@@ -43,7 +52,7 @@
 import {mapState} from 'vuex'
 import Shape from './Shape'
 import {getStyle, getComponentRotatedStyle} from '@/utils/style'
-import {$} from '@/utils/utils'
+import {$, deepCopy} from '@/utils/utils'
 import ContextMenu from './ContextMenu'
 import MarkLine from './MarkLine'
 import Area from './Area'
@@ -56,6 +65,9 @@ import VButton from '@/custom-component/VButton'
 import VText from '@/custom-component/VText'
 import BkInput from '@/custom-component/bkInput';
 import test from '@/views/test'
+import componentList from "@/custom-component/component-list";
+import generateID from "@/utils/generateID";
+import store from "@/store";
 export default {
   components: {Shape, ContextMenu, MarkLine, Area, Grid, Picture, RectShape, VButton, VText, BkInput, test},
   props: {
@@ -249,6 +261,23 @@ export default {
       }
 
       this.$store.commit('showContextMenu', {top, left})
+    },
+
+    handleDrop(e) {
+      e.preventDefault()
+      e.stopPropagation()
+      const index = e.dataTransfer.getData('index')
+      const rectInfo = this.editor.getBoundingClientRect()
+      console.log(this)
+      debugger
+      if (index) {
+        const component = deepCopy(componentList[index])
+        component.style.top = e.clientY - rectInfo.y
+        component.style.left = e.clientX - rectInfo.x
+        component.id = generateID()
+        store.commit('addComponent', {component})
+        store.commit('recordSnapshot')
+      }
     },
 
     getShapeStyle(style) {

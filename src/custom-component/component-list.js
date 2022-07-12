@@ -14,16 +14,65 @@ import bkInput from '@/custom-component/bkInput.vue'
 import Picture from '@/custom-component/Picture'
 import RectShape from '@/custom-component/RectShape'
 import VButton from '@/custom-component/VButton'
-import VText from '@/custom-component/VText'
+import VText from '@/custom-component/VText';
+import { defineAsyncComponent } from 'vue'
 
 // 编辑器左侧组件列表
 const list = [
   {
     id: 0,
-    component: VButton,
+    component: 'div',
+    label: 'div',
+    propValue: 'div',
+    icon: 'm-div',
+    style: {
+      width: 100,
+      height: 50,
+      borderWidth: 1,
+      borderColor: '',
+      borderRadius: '',
+      fontSize: 14,
+      fontWeight: 500,
+      lineHeight: '',
+      letterSpacing: 0,
+      textAlign: '',
+      color: '',
+      backgroundColor: '#f2f2f2',
+      position: 'absolute',
+    },
+    text: '按钮',
+    dataList: [{name: '_inputValue', value: ''}],
+  },
+  {
+    id: 0,
+    component: 'span',
+    label: 'span',
+    propValue: 'span',
+    icon: 'm-span',
+    style: {
+      width: 100,
+      height: 50,
+      borderWidth: 1,
+      borderColor: '',
+      borderRadius: '',
+      fontSize: 14,
+      fontWeight: 500,
+      lineHeight: '',
+      letterSpacing: 0,
+      textAlign: '',
+      color: '',
+      backgroundColor: '#f2f2f2',
+      position: 'absolute',
+    },
+    text: '按钮',
+    dataList: [{name: '_inputValue', value: ''}],
+  },
+  {
+    id: 0,
+    component: defineAsyncComponent(() => import('@/custom-component/VButton')),
     label: '按钮',
     propValue: '按钮',
-    icon: 'button',
+    icon: 'anniu',
     style: {
       width: 100,
       height: 50,
@@ -37,6 +86,7 @@ const list = [
       textAlign: '',
       color: '',
       backgroundColor: '',
+      position: 'absolute'
     },
     attributes: {
       value: '_inputValue',
@@ -50,11 +100,12 @@ const list = [
   {
     component: Picture,
     label: '图片',
-    icon: 'tupian',
+    icon: 'img',
     style: {
       width: 300,
       height: 200,
       borderRadius: '',
+      position: 'absolute'
     },
     attributes: {
       value: '_inputValue',
@@ -67,7 +118,7 @@ const list = [
   {
     component: bkInput,
     label: '输入',
-    icon: 'juxing',
+    icon: 'checkbox-weixuan',
     style: {
       width: 200,
       height:50,
@@ -82,6 +133,7 @@ const list = [
       borderStyle: 'solid',
       borderRadius: '',
       verticalAlign: 'middle',
+      position: 'absolute'
     },
     attributes: {
       value: '_inputValue',
@@ -89,7 +141,7 @@ const list = [
       propValue: '&nbsp;',
     },
     text: '_inputValue',
-    dataList: [{name: '_inputValue', value: ''}],
+    dataList: [{name: '_inputValue', value: 'fwfef'}],
   },
 ]
 

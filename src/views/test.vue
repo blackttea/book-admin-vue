@@ -4,6 +4,7 @@ import test1 from '../components/bkEditor.vue';
 import ErrorPage from './404.vue';
 import bkInput from '@/custom-component/bkInput.vue';
 import {useRouter} from "vue-router";
+import useEval from '@/hooks/useEval';
 
 interface dom {
   id: string,
@@ -151,19 +152,23 @@ export default {
         }
       }
     }
-
     // 属性
     const getAttributes = (tree: any): object =>{
       const _attr = tree?.style ? { style: {...tree.style} } : {};
-      _attr.style.width += 'px';
-      _attr.style.height += 'px';
-      _attr.style.left += 'px';
-      _attr.style.right += 'px';
+      _attr.style?.width ? _attr.style.width += 'px' : '';
+      _attr.style?.height ? _attr.style.height += 'px' : '';
+      _attr.style?.left ? _attr.style.left += 'px' : '';
+      _attr.style?.right ? _attr.style.right += 'px' : '';
+      _attr.style?.top ? _attr.style.top += 'px' : '';
+      _attr.style?.bottom ? _attr.style.bottom += 'px' : '';
+      // store.state.curComponent.attributes[addLabel.value] = useEval(code.value).bind(null, router)
       const attr = tree?.attributes ? tree.attributes: {};
       Object.assign(_attr, attr)
       for(let key in attr) {
         if (dataCenter.hasOwnProperty(attr[key])) {
-          Object.assign(_attr, {[key]: dataCenter[attr[key]]})
+          Object.assign(_attr, {[key]: dataCenter[attr[key]] })
+        } else if (key.indexOf('on') >= 0) {
+          Object.assign(_attr, {[key]:  useEval(attr[key]).bind(null, dataCenter) })
         }
       }
       return _attr
@@ -258,7 +263,6 @@ export default {
         ]
       },
     ]
-    debugger
     initDataCenter()
 
     const result = import('ant-design-vue')

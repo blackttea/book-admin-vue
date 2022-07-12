@@ -34,7 +34,8 @@ export default {
 .component-list {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: center;
+  align-items: center;
 
   .list {
     width: 80%;

@@ -2,7 +2,8 @@
   <div class="event-list">
     <a-form layout="vertical">
       <a-form-item v-for="item in attrList" :label="item.name">
-        <a-input v-model:value="curComponent.attributes[item.name]" placeholder="名称" />
+        <a-input v-model:value="curComponent.attributes[item.name]"  placeholder="名称"
+          :readonly="item.name.indexOf('on') >= 0 ? true : false" @click="item.name.indexOf('on') >= 0 ? editEvent(item.name, item.value) : ''"/>
       </a-form-item>
     </a-form>
     <a-button type="primary" @click="attrShow = true">添加属性</a-button>
@@ -56,7 +57,7 @@ export default {
     }
     attr()
     const addAttr = () => {
-      store.state.curComponent.attributes[addLabel.value] = useEval(code.value).bind(null, router)
+      store.state.curComponent.attributes[addLabel.value] = code.value
     }
     // const addEvent = (event: any, param: any) => {
     //   this.isShowEvent = false
@@ -67,6 +68,11 @@ export default {
     // const removeEvent = (event: any) => {
     //   this.$store.commit('removeEvent', event)
     // }
+    const editEvent = (name, value) => {
+      attrShow.value = true;
+      addLabel.value = name;
+      code.value = value;
+    }
     const addEvent = (event) => {
       store.state.curComponent.attributes[event] = () => {
         alert('h')
@@ -79,7 +85,8 @@ export default {
       addLabel,
       attrList,
       addEvent,
-      addAttr
+      addAttr,
+      editEvent
     }
   },
   computed: mapState([
