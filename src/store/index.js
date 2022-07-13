@@ -88,7 +88,10 @@ export default createStore({
         state.componentData.push(component)
       }
     },
-
+    addInto(state, {com, component}) {
+      component.parent = com.id
+      state.componentData.push(component)
+    },
     deleteComponent(state, index) {
       if (index === undefined) {
         index = state.curComponentIndex

@@ -50,6 +50,8 @@ export default {
       default: 0,
     },
   },
+  setup() {
+  },
   data() {
     return {
       pointList: ['lt', 't', 'rt', 'r', 'rb', 'b', 'lb', 'l'], // 八个方向

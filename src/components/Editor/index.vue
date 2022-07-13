@@ -13,27 +13,29 @@
     <Grid/>
 
     <!--页面组件列表展示-->
-    <Shape
-      v-for="(item, index) in componentData"
-      :key="item.id"
-      :default-style="item.style"
-      :style="getShapeStyle(item.style)"
-      :active="item.id === (curComponent || {}).id"
-      :element="item"
-      :index="index"
-      :class="{ lock: item.isLock }"
-      @drop="handleDrop"
-    >
-      <component
-        :is="item.component"
-        :id="'component' + item.id"
-        class="component"
-        :style="getComponentStyle(item.style)"
-        :prop-value="item.propValue"
-        :element="item"
-        @input="handleInput"
-      />
-    </Shape>
+    <editor :cure-component="componentData" v-if="showCanvas"/>
+<!--    <Shape-->
+<!--      v-for="(item, index) in componentData"-->
+<!--      :key="item.id"-->
+<!--      :default-style="item.style"-->
+<!--      :style="getShapeStyle(item.style)"-->
+<!--      :active="item.id === (curComponent || {}).id"-->
+<!--      :element="item"-->
+<!--      :index="index"-->
+<!--      :class="{ lock: item.isLock }"-->
+<!--      @drop="handleDrop($event, item)"-->
+<!--    >-->
+<!--&lt;!&ndash;      <component&ndash;&gt;-->
+<!--&lt;!&ndash;        :is="item.component"&ndash;&gt;-->
+<!--&lt;!&ndash;        :id="'component' + item.id"&ndash;&gt;-->
+<!--&lt;!&ndash;        class="component"&ndash;&gt;-->
+<!--&lt;!&ndash;        :style="getComponentStyle(item.style)"&ndash;&gt;-->
+<!--&lt;!&ndash;        :prop-value="item.propValue"&ndash;&gt;-->
+<!--&lt;!&ndash;        :element="item"&ndash;&gt;-->
+<!--&lt;!&ndash;        @input="handleInput"&ndash;&gt;-->
+<!--&lt;!&ndash;      />&ndash;&gt;-->
+<!--      <test :cure-component="item" :style="getComponentStyle(item.style)"/>-->
+<!--    </Shape>-->
     <!-- 右击菜单 -->
     <ContextMenu/>
     <!-- 标线 -->
@@ -49,7 +51,7 @@
 </template>
 
 <script>
-import {mapState} from 'vuex'
+import {mapState, useStore} from 'vuex'
 import Shape from './Shape'
 import {getStyle, getComponentRotatedStyle} from '@/utils/style'
 import {$, deepCopy} from '@/utils/utils'
@@ -68,8 +70,10 @@ import test from '@/views/test'
 import componentList from "@/custom-component/component-list";
 import generateID from "@/utils/generateID";
 import store from "@/store";
+import editor from "@/views/editor";
+import {watch, ref} from "vue";
 export default {
-  components: {Shape, ContextMenu, MarkLine, Area, Grid, Picture, RectShape, VButton, VText, BkInput, test},
+  components: {Shape, ContextMenu, MarkLine, Area, Grid, Picture, RectShape, VButton, VText, BkInput, test, editor},
   props: {
     isEdit: {
       type: Boolean,
@@ -87,6 +91,20 @@ export default {
       width: 0,
       height: 0,
       isShowArea: false,
+    }
+  },
+  setup() {
+    const store = useStore();
+    const showCanvas = ref(false);
+
+    watch(() => store.state.componentData, () => {
+      showCanvas.value = false
+      setTimeout(() => {
+        showCanvas.value = true
+      }, 0)
+    }, {deep: true, immediate:true})
+    return{
+      showCanvas
     }
   },
   computed: mapState([
@@ -263,20 +281,17 @@ export default {
       this.$store.commit('showContextMenu', {top, left})
     },
 
-    handleDrop(e) {
+    handleDrop(e, com) {
       e.preventDefault()
       e.stopPropagation()
       const index = e.dataTransfer.getData('index')
-      const rectInfo = this.editor.getBoundingClientRect()
-      console.log(this)
-      debugger
+      const rectInfo = this.editor.getBoundingClientRect();
       if (index) {
         const component = deepCopy(componentList[index])
         component.style.top = e.clientY - rectInfo.y
         component.style.left = e.clientX - rectInfo.x
         component.id = generateID()
-        store.commit('addComponent', {component})
-        store.commit('recordSnapshot')
+        store.commit('addInto', {com, component})
       }
     },
 

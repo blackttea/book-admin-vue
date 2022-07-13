@@ -23,6 +23,7 @@ import {mapState} from 'vuex'
 import ComponentWrapper from './ComponentWrapper'
 import {changeStyleWithScale} from '@/utils/translate'
 import test from "@/views/test";
+
 export default {
   components: {ComponentWrapper, test},
   emits: ['close'],
@@ -31,6 +32,10 @@ export default {
       type: Boolean,
       default: false,
     },
+  },
+  setup() {
+    return {
+    }
   },
   computed: mapState([
     'componentData',

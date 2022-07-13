@@ -38,6 +38,5 @@ export function useFormatDate(time, pattern) {
     }
     return value || 0
   })
-  debugger
   return time_str
 }

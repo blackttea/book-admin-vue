@@ -264,7 +264,6 @@ export default {
       },
     ]
     initDataCenter()
-
     const result = import('ant-design-vue')
     result.then((res) => {
       const renderTree = (arr: Array<dom>) => {
@@ -283,6 +282,7 @@ export default {
       }
       dataCenter.module = res
     })
+
     const renderList = (tree: dom): any => {
       if (tree) {
         if (tree?.children && tree.children.length > 0) {

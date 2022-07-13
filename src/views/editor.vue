@@ -1,0 +1,166 @@
+<script lang="ts">
+import {h, ref, renderSlot, reactive} from 'vue'
+import test1 from '../components/bkEditor.vue';
+import ErrorPage from './404.vue';
+import bkInput from '@/custom-component/bkInput.vue';
+import {useRouter} from "vue-router";
+import useEval from '@/hooks/useEval';
+import Shape from '@/components/Editor/Shape.vue';
+import {useStore} from "vuex";
+
+interface dom {
+  id: string,
+  parent: string,
+  component: any,
+  attributes: any,
+  style?: any,
+  text?: any,
+  hidden?: String,
+  children?: Array<any>,
+  dataList: Array<data>,
+  isLock?: boolean
+}
+
+interface data {
+  name: string,
+  value: any
+}
+
+export default {
+  components:{test1, bkInput, Shape},
+  props: {
+    cureComponent: {
+      type: Object
+    }
+  },
+  setup(props:any, context: any ){
+    const router = useRouter();
+    const dataCenter = reactive<any>({
+      ren: [],
+      r: [],
+    });
+    // 初始化数据中心
+    const initDataCenter = () => {
+      for (const item of renders) {
+        for (const _item of item.dataList) {
+          !dataCenter.hasOwnProperty(_item.name) ? dataCenter[_item.name as keyof typeof dataCenter] = _item.value : ''
+        }
+      }
+    }
+    // 属性
+    const getAttributes = (tree: any): object =>{
+      const _attr = tree?.style ? { style: {...tree.style} } : {};
+      _attr.style?.width ? _attr.style.width += 'px' : '';
+      _attr.style?.height ? _attr.style.height += 'px' : '';
+      _attr.style?.left ? _attr.style.left += 'px' : '';
+      _attr.style?.right ? _attr.style.right += 'px' : '';
+      _attr.style?.top ? _attr.style.top += 'px' : '';
+      _attr.style?.bottom ? _attr.style.bottom += 'px' : '';
+      // store.state.curComponent.attributes[addLabel.value] = useEval(code.value).bind(null, router)
+      const attr = tree?.attributes ? tree.attributes: {};
+      Object.assign(_attr, attr)
+      for(let key in attr) {
+        if (dataCenter.hasOwnProperty(attr[key])) {
+          Object.assign(_attr, {[key]: dataCenter[attr[key]] })
+        } else if (key.indexOf('on') >= 0) {
+          Object.assign(_attr, {[key]:  useEval(attr[key]).bind(null, dataCenter) })
+        }
+      }
+      return _attr
+    }
+    // 判断数据类型。
+    const isObject = (obj:any) => {
+      return typeof obj === 'object' && obj != null;
+    }
+    const  deepClone = (source: any, hash = new WeakMap()) => {
+      if (!isObject(source)) return source; // 判断是否为基础类型，是的话直接返回
+      if (hash.has(source)) return hash.get(source); // 查哈希表，解决循环引用和引用丢失的问题。
+      let target: any = Array.isArray(source) ? [] : {};
+      hash.set(source, target); // 哈希表设值（缓存数据）
+      // Reflect.ownKeys 获取对象自身属性名（包含symbol类型）数组
+      Reflect.ownKeys(source).forEach(key => {
+        if (isObject(source[key])) {
+          target[key] = deepClone(source[key], hash);
+        } else {
+          target[key] = source[key];
+        }
+      });
+      return target;
+    }
+
+    // 重新刷组件属性数据
+    const addInput = () => {
+      dataCenter['_inputValue'] += '0';
+      dataCenter['_dataSource'].pop();
+      dataCenter['_tableShow'] = !dataCenter['_tableShow']
+    }
+    let renders: Array<dom> = (Array.isArray(props.cureComponent) ? deepClone(props.cureComponent) : [deepClone(props.cureComponent)])
+    const store = useStore();
+    initDataCenter()
+    const result = import('ant-design-vue')
+    result.then((res) => {
+      const renderTree = (arr: Array<dom>) => {
+        let data = arr.filter(item => {
+          item.children = arr.filter(e => {
+            return item.id === e.parent
+          })
+          return !item.parent
+        })
+        return data
+      }
+      for(let item of renderTree(renders))
+      {
+        // @ts-ignore
+        dataCenter.r.push(item)
+      }
+      dataCenter.module = res
+    })
+
+    const getShapeStyle = (style: any) => {
+      const result: any = {};
+      ['width', 'height', 'top', 'left', 'rotate'].forEach(attr => {
+        if (attr != 'rotate') {
+          result[attr] = `${style[attr]}`.indexOf('px') < 0 ? style[attr] + 'px' : style[attr]
+        } else {
+          result.transform = 'rotate(' + style[attr] + 'deg)'
+        }
+      })
+      return result
+    }
+  //   <Shape
+  //     v-for="(item, index) in componentData"
+  //     :key="item.id"
+  // :default-style="item.style"
+  // :style="getShapeStyle(item.style)"
+  // :active="item.id === (curComponent || {}).id"
+  // :element="item"
+  // :index="index"
+  // :class="{ lock: item.isLock }"
+  // @drop="handleDrop($event, item)"
+  //     >
+    const renderList = (tree: dom): any => {
+      if (tree) {
+        if (tree?.children && tree.children.length > 0) {
+          const children: any= []
+          for (let _dom of tree.children)
+            children.push(renderList(_dom))
+          return !dataCenter[tree.hidden as keyof typeof dataCenter] &&
+            [h(Shape, {style: getShapeStyle(tree.style), defaultStyle: tree.style, class: { lock: tree.isLock },
+              element: tree, active: tree.id === (store.state.curComponent || {}).id },
+            {default: () => h(dataCenter.module[tree.component] || tree.component, getAttributes(tree),
+            [dataCenter.hasOwnProperty(tree.text) ? dataCenter[tree.text] : tree.text, ...children])})]
+        } else {
+          return !dataCenter[tree.hidden as keyof typeof dataCenter] && [h(Shape,
+            {style: getShapeStyle(tree.style), defaultStyle: tree.style, class: { lock: tree.isLock }, element: tree
+              , active: tree.id === (store.state.curComponent || {}).id},
+            {default: () => h(dataCenter.module[tree.component] || tree.component, getAttributes(tree),
+            dataCenter.hasOwnProperty(tree.text) ? dataCenter[tree.text] : tree.text)})]
+        }
+      }
+    }
+    return () => [h("div",{},{default: () => dataCenter.r.map((item: any) => {//循环渲染
+        return renderList(item)
+      })})]
+  }
+}
+</script>

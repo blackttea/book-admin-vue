@@ -38,9 +38,9 @@ const list = [
       textAlign: '',
       color: '',
       backgroundColor: '#f2f2f2',
-      position: 'absolute',
+      display: 'flex',
+      flexWrap: 'nowrap'
     },
-    text: '按钮',
     dataList: [{name: '_inputValue', value: ''}],
   },
   {
@@ -62,7 +62,6 @@ const list = [
       textAlign: '',
       color: '',
       backgroundColor: '#f2f2f2',
-      position: 'absolute',
     },
     text: '按钮',
     dataList: [{name: '_inputValue', value: ''}],
@@ -86,7 +85,6 @@ const list = [
       textAlign: '',
       color: '',
       backgroundColor: '',
-      position: 'absolute'
     },
     attributes: {
       value: '_inputValue',
@@ -105,7 +103,6 @@ const list = [
       width: 300,
       height: 200,
       borderRadius: '',
-      position: 'absolute'
     },
     attributes: {
       value: '_inputValue',
@@ -133,7 +130,6 @@ const list = [
       borderStyle: 'solid',
       borderRadius: '',
       verticalAlign: 'middle',
-      position: 'absolute'
     },
     attributes: {
       value: '_inputValue',
