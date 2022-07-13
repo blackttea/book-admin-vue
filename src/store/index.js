@@ -88,6 +88,14 @@ export default createStore({
         state.componentData.push(component)
       }
     },
+    editComponent(state, {component}) {
+      for (let i in state.componentData) {
+        if (component.id === state.componentData[i].id) {
+          Object.assign(state.componentData[i], component)
+          break
+        }
+      }
+    },
     addInto(state, {com, component}) {
       component.parent = com.id
       state.componentData.push(component)

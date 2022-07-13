@@ -96,6 +96,7 @@ export default {
   setup() {
     const store = useStore();
     const showCanvas = ref(false);
+    const lastId = ref(0);
 
     watch(() => store.state.componentData, () => {
       showCanvas.value = false
@@ -103,6 +104,13 @@ export default {
         showCanvas.value = true
       }, 0)
     }, {deep: true, immediate:true})
+
+    watch(() => [store.state.curComponent?.id, store.state.curComponent], (newVal, oldVal) => {
+      if (lastId.value !== 0) {
+        debugger
+        store.commit('editComponent', { component: store.state.curComponent })
+      }
+    })
     return{
       showCanvas
     }
