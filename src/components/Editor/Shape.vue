@@ -238,8 +238,8 @@ export default {
         hasMove = true
         const curX = moveEvent.clientX
         const curY = moveEvent.clientY
-        pos.top = curY - startY + startTop
-        pos.left = curX - startX + startLeft
+        pos.top = (curY - startY + startTop) >= 0 ? (curY - startY + startTop) : 0
+        pos.left = (curX - startX + startLeft) >= 0 ? (curX - startX + startLeft) : 0
 
         // 修改当前组件样式
         this.$store.commit('setShapeStyle', pos)

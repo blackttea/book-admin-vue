@@ -15,6 +15,7 @@
 
 <script>
 import componentList from '@/custom-component/component-list'
+import {useStore} from "vuex";
 
 export default {
   data() {
@@ -22,10 +23,16 @@ export default {
       componentList,
     }
   },
-  methods: {
-    handleDragStart(e) {
+  setup(){
+    const store = useStore();
+    const handleDragStart = (e) => {
+      store.state.dragIndex = e.target.dataset.index
+      store.state.addTimes = 0
       e.dataTransfer.setData('index', e.target.dataset.index)
-    },
+    }
+    return{
+      handleDragStart
+    }
   },
 }
 </script>

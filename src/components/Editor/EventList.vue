@@ -8,7 +8,7 @@
     </a-form>
     <a-button type="primary" @click="attrShow = true">添加属性</a-button>
   </div>
-  <a-modal v-model:visible="attrShow" title="元素属性" @ok="addAttr" width="800px">
+  <a-modal v-model:visible="attrShow" title="元素属性" @ok="addAttr" width="800px" ok-text="确认" cancel-text="取消">
     <div class="attr-label">属性名:</div>
     <a-input v-model:value="addLabel" placeholder="名称" />
     <div class="attr-label">代码:</div>
@@ -21,7 +21,7 @@ import {mapState, useStore} from 'vuex';
 import Modal from '@/components/Editor/Modal.vue';
 // @ts-ignore
 import {eventList} from '../../utils/events';
-import {reactive, ref} from 'vue';
+import {reactive, ref, watch} from 'vue';
 import bkEditor from "@/components/bkEditor.vue";
 import {useRouter} from "vue-router";
 
@@ -51,13 +51,17 @@ export default {
     }
 
     const attr = () => {
-      const  sa = store.state.curComponent.attributes;
+      const  sa = store.state.curComponent?.attributes || [];
       attrList.length = 0;
       for (let item in sa ) attrList.push({ name:item, value:sa[item] })
     }
     attr()
+    watch(() => store.state.curComponent, () =>{
+      attr()
+    }, { deep: true })
     const addAttr = () => {
-      store.state.curComponent.attributes[addLabel.value] = code.value
+      store.state.curComponent.attributes[addLabel.value] = code.value;
+      attrShow.value = false;
     }
     // const addEvent = (event: any, param: any) => {
     //   this.isShowEvent = false

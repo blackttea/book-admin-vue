@@ -1,5 +1,5 @@
 <script lang="ts">
-import {h, ref, renderSlot, reactive} from 'vue'
+import {h, ref, renderSlot, reactive, markRaw} from 'vue'
 import test1 from '../components/bkEditor.vue';
 import ErrorPage from './404.vue';
 import bkInput from '@/custom-component/bkInput.vue';
@@ -7,6 +7,12 @@ import {useRouter} from "vue-router";
 import useEval from '@/hooks/useEval';
 import Shape from '@/components/Editor/Shape.vue';
 import {useStore} from "vuex";
+//@ts-ignore
+import {$, deepCopy} from '@/utils/utils.js';
+//@ts-ignore
+import generateID from "@/utils/generateID";
+//@ts-ignore
+import componentList from "@/custom-component/component-list";
 
 interface dom {
   id: string,
@@ -97,25 +103,20 @@ export default {
     let renders: Array<dom> = (Array.isArray(props.cureComponent) ? deepClone(props.cureComponent) : [deepClone(props.cureComponent)])
     const store = useStore();
     initDataCenter()
-    const result = import('ant-design-vue')
-    result.then((res) => {
-      const renderTree = (arr: Array<dom>) => {
-        let data = arr.filter(item => {
-          item.children = arr.filter(e => {
-            return item.id === e.parent
-          })
-          return !item.parent
+    const renderTree = (arr: Array<dom>) => {
+      let data = arr.filter(item => {
+        item.children = arr.filter(e => {
+          return item.id === e.parent
         })
-        return data
-      }
-      for(let item of renderTree(renders))
-      {
-        // @ts-ignore
-        dataCenter.r.push(item)
-      }
-      dataCenter.module = res
-    })
-
+        return !item.parent
+      })
+      return data
+    }
+    for(let item of renderTree(renders))
+    {
+      // @ts-ignore
+      dataCenter.r.push(item)
+    }
     const getShapeStyle = (style: any) => {
       const result: any = {};
       ['width', 'height', 'top', 'left', 'rotate'].forEach(attr => {
@@ -138,6 +139,16 @@ export default {
   // :class="{ lock: item.isLock }"
   // @drop="handleDrop($event, item)"
   //     >
+    const handleDrop = (e: any, com: any) => {
+      const index = store.state.dragIndex
+      if (index && com.component === 'div') {
+        const component = deepCopy(componentList[index])
+        component.style.top = e.layerY
+        component.style.left = e.layerX
+        component.id = generateID()
+        store.commit('addInto', {com, component})
+      }
+    }
     const renderList = (tree: dom): any => {
       if (tree) {
         if (tree?.children && tree.children.length > 0) {
@@ -146,14 +157,14 @@ export default {
             children.push(renderList(_dom))
           return !dataCenter[tree.hidden as keyof typeof dataCenter] &&
             [h(Shape, {style: getShapeStyle(tree.style), defaultStyle: tree.style, class: { lock: tree.isLock },
-              element: tree, active: tree.id === (store.state.curComponent || {}).id },
-            {default: () => h(dataCenter.module[tree.component] || tree.component, getAttributes(tree),
+              element: tree, active: tree.id === (store.state.curComponent || {}).id, onDrop: handleDrop.bind(null, event, tree)},
+            {default: () => h(tree.component, getAttributes(tree),
             [dataCenter.hasOwnProperty(tree.text) ? dataCenter[tree.text] : tree.text, ...children])})]
         } else {
           return !dataCenter[tree.hidden as keyof typeof dataCenter] && [h(Shape,
             {style: getShapeStyle(tree.style), defaultStyle: tree.style, class: { lock: tree.isLock }, element: tree
-              , active: tree.id === (store.state.curComponent || {}).id},
-            {default: () => h(dataCenter.module[tree.component] || tree.component, getAttributes(tree),
+              , active: tree.id === (store.state.curComponent || {}).id, onDrop: handleDrop.bind(null, event, tree)},
+            {default: () => h(tree.component, getAttributes(tree),
             dataCenter.hasOwnProperty(tree.text) ? dataCenter[tree.text] : tree.text)})]
         }
       }

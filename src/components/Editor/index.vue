@@ -25,21 +25,21 @@
 <!--      :class="{ lock: item.isLock }"-->
 <!--      @drop="handleDrop($event, item)"-->
 <!--    >-->
-<!--&lt;!&ndash;      <component&ndash;&gt;-->
-<!--&lt;!&ndash;        :is="item.component"&ndash;&gt;-->
-<!--&lt;!&ndash;        :id="'component' + item.id"&ndash;&gt;-->
-<!--&lt;!&ndash;        class="component"&ndash;&gt;-->
-<!--&lt;!&ndash;        :style="getComponentStyle(item.style)"&ndash;&gt;-->
-<!--&lt;!&ndash;        :prop-value="item.propValue"&ndash;&gt;-->
-<!--&lt;!&ndash;        :element="item"&ndash;&gt;-->
-<!--&lt;!&ndash;        @input="handleInput"&ndash;&gt;-->
-<!--&lt;!&ndash;      />&ndash;&gt;-->
-<!--      <test :cure-component="item" :style="getComponentStyle(item.style)"/>-->
+<!--      <component-->
+<!--        :is="item.component"-->
+<!--        :id="'component' + item.id"-->
+<!--        class="component"-->
+<!--        :style="getComponentStyle(item.style)"-->
+<!--        :prop-value="item.propValue"-->
+<!--        :element="item"-->
+<!--        @input="handleInput"-->
+<!--      />-->
+<!--&lt;!&ndash;      <test :cure-component="item" :style="getComponentStyle(item.style)"/>&ndash;&gt;-->
 <!--    </Shape>-->
     <!-- 右击菜单 -->
     <ContextMenu/>
     <!-- 标线 -->
-    <MarkLine/>
+<!--    <MarkLine/>-->
     <!-- 选中区域 -->
     <Area
       v-show="isShowArea"
@@ -71,9 +71,10 @@ import componentList from "@/custom-component/component-list";
 import generateID from "@/utils/generateID";
 import store from "@/store";
 import editor from "@/views/editor";
-import {watch, ref} from "vue";
+import {watch, ref, markRaw} from "vue";
 export default {
-  components: {Shape, ContextMenu, MarkLine, Area, Grid, Picture, RectShape, VButton, VText, BkInput, test, editor},
+  components: {Shape, ContextMenu, MarkLine, Area, Grid, Picture,
+    RectShape, VButton, VText, BkInput, test, editor},
   props: {
     isEdit: {
       type: Boolean,
@@ -98,19 +99,18 @@ export default {
     const showCanvas = ref(false);
     const lastId = ref(0);
 
-    watch(() => store.state.componentData, () => {
-      showCanvas.value = false
-      setTimeout(() => {
-        showCanvas.value = true
-      }, 0)
-    }, {deep: true, immediate:true})
-
-    watch(() => [store.state.curComponent?.id, store.state.curComponent], (newVal, oldVal) => {
-      if (lastId.value !== 0) {
-        debugger
-        store.commit('editComponent', { component: store.state.curComponent })
+    watch(() => [store.state.curComponent?.id, store.state.curComponent, store.state.componentData], (newVal, oldVal) => {
+      if (oldVal && oldVal[0] && newVal && (newVal[0] !== oldVal[0] || newVal[2].length !== lastId.value)) {
+        store.commit('editComponent', { component: oldVal[1] })
       }
-    })
+      if (newVal[2].length !== lastId.value) {
+        showCanvas.value = false
+        lastId.value = newVal[2].length;
+        setTimeout(() => {
+          showCanvas.value = true
+        }, 0)
+      }
+    }, { deep: true, immediate: true })
     return{
       showCanvas
     }

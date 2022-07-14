@@ -32,6 +32,8 @@ export default createStore({
     // 点击画布时是否点中组件，主要用于取消选中组件用。
     // 如果没点中组件，并且在画布空白处弹起鼠标，则取消当前组件的选中状态
     isClickComponent: false,
+    dragIndex: 0,
+    addTimes: 0
   },
   mutations: {
     ...animation.mutations,
@@ -82,10 +84,12 @@ export default createStore({
     },
 
     addComponent(state, {component, index}) {
-      if (index !== undefined) {
-        state.componentData.splice(index, 0, component)
-      } else {
-        state.componentData.push(component)
+      if (state.addTimes === 0) {
+        if (index !== undefined) {
+          state.componentData.splice(index, 0, component)
+        } else {
+          state.componentData.push(component)
+        }
       }
     },
     editComponent(state, {component}) {
@@ -98,7 +102,8 @@ export default createStore({
     },
     addInto(state, {com, component}) {
       component.parent = com.id
-      state.componentData.push(component)
+      state.componentData.push(component);
+      state.addTimes += 1
     },
     deleteComponent(state, index) {
       if (index === undefined) {

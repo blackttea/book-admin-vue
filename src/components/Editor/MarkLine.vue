@@ -56,7 +56,7 @@ export default {
       const lines = this.$refs
       const components = this.componentData
       const curComponentStyle = getComponentRotatedStyle(this.curComponent.style)
-      const curComponentHalfwidth = curComponentStyle.width / 2
+      const curComponentHalfWidth = curComponentStyle.width / 2
       const curComponentHalfHeight = curComponentStyle.height / 2
 
       this.hideLine()
@@ -64,7 +64,7 @@ export default {
         if (component == this.curComponent) return
         const componentStyle = getComponentRotatedStyle(component.style)
         const {top, left, bottom, right} = componentStyle
-        const componentHalfwidth = componentStyle.width / 2
+        const componentHalfWidth = componentStyle.width / 2
         const componentHalfHeight = componentStyle.height / 2
 
         const conditions = {
@@ -123,11 +123,11 @@ export default {
             },
             {
               // 组件与拖拽节点的中间是否对齐
-              isNearly: this.isNearly(curComponentStyle.left + curComponentHalfwidth, left + componentHalfwidth),
+              isNearly: this.isNearly(curComponentStyle.left + curComponentHalfWidth, left + componentHalfWidth),
               lineNode: lines.yc[0], // yc
               line: 'yc',
-              dragShift: left + componentHalfwidth - curComponentHalfwidth,
-              lineShift: left + componentHalfwidth,
+              dragShift: left + componentHalfWidth - curComponentHalfWidth,
+              lineShift: left + componentHalfWidth,
             },
             {
               isNearly: this.isNearly(curComponentStyle.left, right),
@@ -157,7 +157,11 @@ export default {
               key,
               value: rotate != 0 ? this.translatecurComponentShift(key, condition, curComponentStyle) : condition.dragShift,
             })
-            condition.lineNode.style[key] = `${condition.lineShift}px`
+            const getTL = () => {
+              if (key === 'top') return `${condition.lineShift + (curComponentStyle?.top || 0)}px`;
+              else if (key === 'left') return `${condition.lineShift + (curComponentStyle?.left || 0)}px`;
+            }
+            condition.lineNode.style[key] = this.curComponent.parent ? getTL() : `${condition.lineShift}px`
             needToShow.push(condition.line)
           })
         })

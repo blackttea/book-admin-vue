@@ -7,8 +7,17 @@
       <a-form-item v-if="curComponent && !excludes.includes(curComponent.component)" label="内容" class="form-item">
         <a-input v-model="curComponent.propValue" type="textarea"/>
       </a-form-item>
+      <a-form-item label="样式" class="form-item">
+        <a-input v-model:value="curStyle" type="textarea" readonly @click="attrShow = true"/>
+      </a-form-item>
     </a-form>
   </div>
+  <a-modal v-model:visible="attrShow" title="元素属性" @ok="addAttr" width="800px" ok-text="确认" cancel-text="取消">
+    <div class="attr-label">属性名:</div>
+    <a-input v-model:value="addLabel" placeholder="名称" />
+    <div class="attr-label">代码:</div>
+    <a-textarea v-model:value="addValue" placeholder="输入代码" :rows="4" />
+  </a-modal>
 </template>
 
 <script>
@@ -65,9 +74,19 @@ export default {
   setup (){
     const addLabel = ref('');
     const addValue = ref('');
+    const store = useStore();
+    const attrShow = ref(false);
+    const curStyle = ref("");
+    const addAttr = () => {
+      store.state.curComponent.style[addLabel.value] = addValue.value;
+      attrShow.value = false
+    }
     return {
       addLabel,
       addValue,
+      curStyle,
+      attrShow,
+      addAttr
     }
   },
   computed: {
