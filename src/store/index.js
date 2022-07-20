@@ -101,6 +101,7 @@ export default createStore({
       }
     },
     addInto(state, {com, component}) {
+      if (state.addTimes !== 0) return
       component.parent = com.id
       state.componentData.push(component);
       state.addTimes += 1

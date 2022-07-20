@@ -12,7 +12,7 @@
       :key="item"
       class="shape-point"
       :style="getPointStyle(item)"
-      @mousedown="handleMouseDownOnPoint(item, $event)"
+      @mousedown="handleMouseDownOnPoint(item, $event, element)"
     >
     </div>
     <slot></slot>
@@ -79,6 +79,7 @@ export default {
     }
   },
   computed: mapState([
+    'componentData',
     'curComponent',
     'editor',
   ]),
@@ -273,14 +274,22 @@ export default {
       this.$store.commit('hideContextMenu')
     },
 
-    handleMouseDownOnPoint(point, e) {
+    handleMouseDownOnPoint(point, e, cur) {
       this.$store.commit('setInEditorStatus', true)
       this.$store.commit('setClickComponentStatus', true)
       e.stopPropagation()
       e.preventDefault()
-
       const style = {...this.defaultStyle}
-
+      if (cur?.parent) {
+        // for (let item of )
+      }
+      const changeList = ['left', 'right', 'bottom', 'top', 'width', 'height']
+      for (let item of changeList) {
+        if (style.hasOwnProperty(item)) {
+          if (style[item]) style[item] = typeof style[item] === String ? parseInt(style[item]) : style[item]
+          else style[item] = 0
+        }
+      }
       // 组件宽高比
       const proportion = style.width / style.height
 
@@ -301,7 +310,6 @@ export default {
         x: Math.round(pointRect.left - editorRectInfo.left + e.target.offsetWidth / 2),
         y: Math.round(pointRect.top - editorRectInfo.top + e.target.offsetHeight / 2),
       }
-
       // 获取对称点的坐标
       const symmetricPoint = {
         x: center.x - (curPoint.x - center.x),
