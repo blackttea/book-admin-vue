@@ -29,7 +29,7 @@ const routes: Array<RouteRecordRaw> = [
     path: '/404',
     name: "404",
     component: () =>
-        import(/* webpackChunkName: "about" */ "../views/map/index.vue"),
+        import(/* webpackChunkName: "about" */ "../views/menu/index.vue"),
   },
   {
     path: "/login",
@@ -47,10 +47,10 @@ const routes: Array<RouteRecordRaw> = [
       import(/* webpackChunkName: "about" */ "../views/lowCode/index.vue"),
   },
   {
-    path: '/map',
-    name: "map",
+    path: '/menu',
+    name: "menu",
     component: () =>
-        import(/* webpackChunkName: "about" */ "../views/map/index.vue"),
+        import(/* webpackChunkName: "about" */ "../views/menu/index.vue"),
   },
 ];
 

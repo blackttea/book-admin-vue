@@ -26,6 +26,7 @@ import { ref } from 'vue';
 import {useStore} from "vuex";
 import useEval from "@/hooks/useEval";
 export default {
+  components: {  },
   data() {
     return {
       excludes: ['Picture', 'Group'], // 这些组件不显示内容
@@ -79,7 +80,6 @@ export default {
     const curStyle = ref("");
     const addAttr = () => {
       store.state.curComponent.style[addLabel.value] = addValue.value;
-      attrShow.value = false
     }
     return {
       addLabel,
