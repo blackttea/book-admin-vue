@@ -5,7 +5,6 @@
     @click="selectCurComponent"
     @mousedown="handleMouseDownOnShape"
   >
-    <span v-show="isActive()" class="iconfont icon-xiangyouxuanzhuan" @mousedown="handleRotate"></span>
     <span v-show="element.isLock" class="iconfont icon-suo"></span>
     <div
       v-for="item in (isActive()? pointList : [])"
@@ -102,50 +101,6 @@ export default {
       return this.active && !this.element.isLock
     },
 
-    // 处理旋转
-    handleRotate(e) {
-      this.$store.commit('setClickComponentStatus', true)
-      e.preventDefault()
-      e.stopPropagation()
-      // 初始坐标和初始角度
-      const pos = {...this.defaultStyle}
-      const startY = e.clientY
-      const startX = e.clientX
-      const startRotate = pos.rotate
-
-      // 获取元素中心点位置
-      const rect = this.$el.getBoundingClientRect()
-      const centerX = rect.left + rect.width / 2
-      const centerY = rect.top + rect.height / 2
-
-      // 旋转前的角度
-      const rotateDegreeBefore = Math.atan2(startY - centerY, startX - centerX) / (Math.PI / 180)
-
-      // 如果元素没有移动，则不保存快照
-      let hasMove = false
-      const move = (moveEvent) => {
-        hasMove = true
-        const curX = moveEvent.clientX
-        const curY = moveEvent.clientY
-        // 旋转后的角度
-        const rotateDegreeAfter = Math.atan2(curY - centerY, curX - centerX) / (Math.PI / 180)
-        // 获取旋转的角度值
-        pos.rotate = startRotate + rotateDegreeAfter - rotateDegreeBefore
-        // 修改当前组件样式
-        this.$store.commit('setShapeStyle', pos)
-      }
-
-      const up = () => {
-        hasMove && this.$store.commit('recordSnapshot')
-        document.removeEventListener('mousemove', move)
-        document.removeEventListener('mouseup', up)
-        this.cursors = this.getCursor() // 根据旋转角度获取光标位置
-      }
-
-      document.addEventListener('mousemove', move)
-      document.addEventListener('mouseup', up)
-    },
-
     getPointStyle(point) {
       const {width, height} = this.defaultStyle
       const hasT = /t/.test(point)
@@ -235,6 +190,7 @@ export default {
 
       // 如果元素没有移动，则不保存快照
       let hasMove = false
+
       const move = (moveEvent) => {
         hasMove = true
         const curX = moveEvent.clientX
@@ -245,14 +201,7 @@ export default {
         // 修改当前组件样式
         this.$store.commit('setShapeStyle', pos)
         // 等更新完当前组件的样式并绘制到屏幕后再判断是否需要吸附
-        // 如果不使用 $nextTick，吸附后将无法移动
-        this.$nextTick(() => {
-          // 触发元素移动事件，用于显示标线、吸附功能
-          // 后面两个参数代表鼠标移动方向
-          // curY - startY > 0 true 表示向下移动 false 表示向上移动
-          // curX - startX > 0 true 表示向右移动 false 表示向左移动
-          eventBus.emit('move', curY - startY > 0, curX - startX > 0)
-        })
+        // 如果不使用 $nextTick，吸附后将无法移
       }
 
       const up = () => {

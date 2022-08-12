@@ -13,7 +13,9 @@
     <Grid/>
 
     <!--页面组件列表展示-->
-    <editor :cure-component="componentData" v-if="showCanvas"/>
+    <div class="editor-container">
+      <editor :cure-component="componentData" v-if="showCanvas"/>
+    </div>
 <!--    <Shape-->
 <!--      v-for="(item, index) in componentData"-->
 <!--      :key="item.id"-->
@@ -342,13 +344,19 @@ export default {
   position: relative;
   background: #fff;
   margin: auto;
-
   .lock {
     opacity: .5;
 
     &:hover {
       cursor: not-allowed;
     }
+  }
+
+  .editor-container{
+    display: flex;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(255, 255, 255);
   }
 }
 

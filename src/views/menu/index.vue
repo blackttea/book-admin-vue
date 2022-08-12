@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="headers">
-      <div class="portrait"></div>
+      <div class="portrait"><breadcrumb :breadcrumb-list="breadcrumb"></breadcrumb></div>
     </div>
     <div class="left-menu" :style="{ width: menuWidth, height: '100%' }">
       <a-menu
@@ -26,7 +26,7 @@
              :style="{backgroundColor: activeMenu === item ? '#409eff' : '#fff',
              color: activeMenu === item ? '#fff' : '#000'}"
              :key="item" @click="clickMenu(item)">
-          {{item}} <close-outlined class="tab-close" />
+          {{ item.name }} <close-outlined class="tab-close" />
         </div>
       </div>
       <pad>
@@ -47,6 +47,8 @@ import {
 import type { MenuMode, MenuTheme } from 'ant-design-vue';
 import pad from '../../components/pad/index.vue';
 import subMenu from './subMenu.vue';
+import breadcrumb from './breadcrumb.vue';
+import {menu} from "@/views/menu/menu";
 
 export default defineComponent({
   components: {
@@ -56,7 +58,8 @@ export default defineComponent({
     SettingOutlined,
     pad,
     CloseOutlined,
-    subMenu
+    subMenu,
+    breadcrumb
   },
   setup() {
     const state = reactive({
@@ -82,8 +85,12 @@ export default defineComponent({
           children:[{
             id: 9,
             name: '菜单1-1-2',
-            path: 'test'
-          },]
+            children:[{
+                id: 10,
+                name: '菜单1-1-1-1',
+                path: 'test'
+            }],
+          }]
         },
         {
           id: 3,
@@ -93,7 +100,7 @@ export default defineComponent({
         {
           id: 4,
           name: '菜单1-3',
-          path: 'test'
+          path: 'test',
         },
       ]
     },
@@ -118,20 +125,59 @@ export default defineComponent({
         },
       ]
     }])
+
+    const breadcrumb = [{
+      id: 1,
+      name: '菜单1'},{
+      id: 5,
+      name: '菜单2',
+      children: [
+        {
+          id: 6,
+          name: '菜单2-1',
+          path: 'test'
+        },
+        {
+          id: 7,
+          name: '菜单2-2',
+          path: 'test'
+        },
+        {
+          id: 8,
+          name: '菜单2-3',
+          path: 'test'
+        },
+      ]
+    },{
+      id: 15,
+      name: '菜单15'},]
     const menuWidth = ref('206px');
-    const activeList = reactive(['测试1', '测试2', '测试3', '测试4', '测试5', '测试6'])
+    const activeList = reactive<menu[]>([]);
     const clickMenu = (item: string) => {
       console.log(item)
       state.activeMenu = item
     }
 
+    const getKey = (tree: Array<menu>, id: number) => {
+      for (let item of tree) {
+        if (item.children && item.children.length > 0) getKey(item.children, id);
+        else {
+          if (item.id === id) {
+            activeList.push(item)
+          }
+        }
+      }
+    }
     const selectedMenu = (data: any) => {
-      console.log(data)
-      debugger
+      let key = data?.keyPath[data?.keyPath.length - 1];
+      getKey(menuTree, parseInt(key))
+      // console.log(example);
+      console.log(data);
     }
     return {
       menuWidth,
       activeList,
+      breadcrumb,
       menuTree,
       ...toRefs(state),
       changeMode,

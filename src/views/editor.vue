@@ -41,7 +41,7 @@ export default {
   },
   setup(props:any, context: any ){
     const router = useRouter();
-    const dataCenter = reactive<any>({
+    const dataCenter = reactive({
       ren: [],
       r: [],
     });
@@ -67,7 +67,7 @@ export default {
       Object.assign(_attr, attr)
       for(let key in attr) {
         if (dataCenter.hasOwnProperty(attr[key])) {
-          Object.assign(_attr, {[key]: dataCenter[attr[key]] })
+          Object.assign(_attr, {[key]: dataCenter[attr[key] as keyof typeof dataCenter] })
         } else if (key.indexOf('on') >= 0) {
           Object.assign(_attr, {[key]:  useEval(attr[key]).bind(null, dataCenter) })
         }
@@ -95,11 +95,11 @@ export default {
     }
 
     // 重新刷组件属性数据
-    const addInput = () => {
-      dataCenter['_inputValue'] += '0';
-      dataCenter['_dataSource'].pop();
-      dataCenter['_tableShow'] = !dataCenter['_tableShow']
-    }
+    // const addInput = () => {
+    //   dataCenter['_inputValue' as keyof typeof dataCenter] += '0';
+    //   dataCenter['_dataSource' as keyof typeof dataCenter].pop();
+    //   dataCenter['_tableShow' as keyof typeof dataCenter] = !dataCenter['_tableShow' as keyof typeof dataCenter]
+    // }
     let renders: Array<dom> = (Array.isArray(props.cureComponent) ? deepClone(props.cureComponent) : [deepClone(props.cureComponent)])
     const store = useStore();
     initDataCenter()
@@ -159,17 +159,17 @@ export default {
             [h(Shape, {style: getShapeStyle(tree.style), defaultStyle: tree.style, class: { lock: tree.isLock },
               element: tree, active: tree.id === (store.state.curComponent || {}).id, onDrop: handleDrop.bind(null, event, tree)},
             {default: () => h(tree.component, getAttributes(tree),
-            [dataCenter.hasOwnProperty(tree.text) ? dataCenter[tree.text] : tree.text, ...children])})]
+            [dataCenter.hasOwnProperty(tree.text) ? dataCenter[tree.text as keyof typeof dataCenter] : tree.text, ...children])})]
         } else {
           return !dataCenter[tree.hidden as keyof typeof dataCenter] && [h(Shape,
             {style: getShapeStyle(tree.style), defaultStyle: tree.style, class: { lock: tree.isLock }, element: tree
               , active: tree.id === (store.state.curComponent || {}).id, onDrop: handleDrop.bind(null, event, tree)},
             {default: () => h(tree.component, getAttributes(tree),
-            dataCenter.hasOwnProperty(tree.text) ? dataCenter[tree.text] : tree.text)})]
+            dataCenter.hasOwnProperty(tree.text) ? dataCenter[tree.text as keyof typeof dataCenter] : tree.text)})]
         }
       }
     }
-    return () => [h("div",{},{default: () => dataCenter.r.map((item: any) => {//循环渲染
+    return () => [h("div",{style:{width: '100%', height: '100%'}},{default: () => dataCenter.r.map((item: any) => {//循环渲染
         return renderList(item)
       })})]
   }
