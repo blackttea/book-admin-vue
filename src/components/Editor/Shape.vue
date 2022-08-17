@@ -3,17 +3,11 @@
     class="shape"
     :class="{ active }"
     @click="selectCurComponent"
+    :style="{border: active ? '1px dashed #1890ff' : 'none'}"
     @mousedown="handleMouseDownOnShape"
+    ref="shape"
   >
     <span v-show="element.isLock" class="iconfont icon-suo"></span>
-    <div
-      v-for="item in (isActive()? pointList : [])"
-      :key="item"
-      class="shape-point"
-      :style="getPointStyle(item)"
-      @mousedown="handleMouseDownOnPoint(item, $event, element)"
-    >
-    </div>
     <slot></slot>
   </div>
 </template>
@@ -49,7 +43,7 @@ export default {
       default: 0,
     },
   },
-  setup() {
+  setup(props) {
   },
   data() {
     return {
@@ -102,7 +96,10 @@ export default {
     },
 
     getPointStyle(point) {
-      const {width, height} = this.defaultStyle
+      if (!point || !this.$refs.shape) return;
+      const width = this.$refs.shape.clientWidth;
+      const height = this.$refs.shape.clientHeight;
+
       const hasT = /t/.test(point)
       const hasB = /b/.test(point)
       const hasL = /l/.test(point)
@@ -232,44 +229,13 @@ export default {
       if (cur?.parent) {
         // for (let item of )
       }
-      const changeList = ['left', 'right', 'bottom', 'top', 'width', 'height']
-      for (let item of changeList) {
-        if (style.hasOwnProperty(item)) {
-          if (style[item]) style[item] = typeof style[item] === String ? parseInt(style[item]) : style[item]
-          else style[item] = 0
-        }
-      }
-      // 组件宽高比
-      const proportion = style.width / style.height
 
-      // 组件中心点
-      const center = {
-        x: style.left + style.width / 2,
-        y: style.top + style.height / 2,
-      }
-
-      // 获取画布位移信息
-      const editorRectInfo = this.editor.getBoundingClientRect()
-
-      // 获取 point 与实际拖动基准点的差值 @justJokee
-      // fix https://github.com/woai3c/visual-drag-demo/issues/26#issue-937686285
-      const pointRect = e.target.getBoundingClientRect()
-      // 当前点击圆点相对于画布的中心坐标
-      const curPoint = {
-        x: Math.round(pointRect.left - editorRectInfo.left + e.target.offsetWidth / 2),
-        y: Math.round(pointRect.top - editorRectInfo.top + e.target.offsetHeight / 2),
-      }
-      // 获取对称点的坐标
-      const symmetricPoint = {
-        x: center.x - (curPoint.x - center.x),
-        y: center.y - (curPoint.y - center.y),
-      }
+      debugger
 
       // 是否需要保存快照
       let needSave = false
       let isFirst = true
 
-      const needLockProportion = this.isNeedLockProportion()
       const move = (moveEvent) => {
         // 第一次点击时也会触发 move，所以会有“刚点击组件但未移动，组件的大小却改变了”的情况发生
         // 因此第一次点击时不触发 move 事件
@@ -277,18 +243,7 @@ export default {
           isFirst = false
           return
         }
-
         needSave = true
-        const curPositon = {
-          x: moveEvent.clientX - editorRectInfo.left,
-          y: moveEvent.clientY - editorRectInfo.top,
-        }
-
-        calculateComponentPositonAndSize(point, style, curPositon, proportion, needLockProportion, {
-          center,
-          curPoint,
-          symmetricPoint,
-        })
 
         this.$store.commit('setShapeStyle', style)
       }
@@ -320,8 +275,6 @@ export default {
 
 <style lang="scss" scoped>
 .shape {
-  position: absolute;
-
   &:hover {
     cursor: move;
   }

@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@ant-design/icons-vue": "^6.1.0",
+    "@kangc/v-md-editor": "^2.3.15",
     "@types/nprogress": "^0.2.0",
     "@wangeditor/editor": "^5.1.1",
     "@wangeditor/editor-for-vue": "^5.1.11",
@@ -21,8 +22,10 @@
     "mitt": "^3.0.0",
     "nprogress": "^0.2.0",
     "pinia": "^2.0.14",
+    "prismjs": "^1.28.0",
     "three": "^0.141.0",
     "vue": "^3.2.13",
+    "vue-codemirror": "^6.0.0",
     "vue-router": "^4.0.3",
     "vuex": "^4.0.0",
     "vxe-table": "^4.2.6",

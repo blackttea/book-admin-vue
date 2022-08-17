@@ -154,13 +154,7 @@ export default {
     }
     // 属性
     const getAttributes = (tree: any): object =>{
-      const _attr = tree?.style ? { style: {...tree.style} } : {};
-      _attr.style?.width ? _attr.style.width += 'px' : '';
-      _attr.style?.height ? _attr.style.height += 'px' : '';
-      _attr.style?.left ? _attr.style.left += 'px' : '';
-      _attr.style?.right ? _attr.style.right += 'px' : '';
-      _attr.style?.top ? _attr.style.top += 'px' : '';
-      _attr.style?.bottom ? _attr.style.bottom += 'px' : '';
+      const _attr = tree?.style ? { style: {...tree.style}, dataCenter } : { dataCenter };
       // store.state.curComponent.attributes[addLabel.value] = useEval(code.value).bind(null, router)
       const attr = tree?.attributes ? tree.attributes: {};
       Object.assign(_attr, attr)
@@ -297,7 +291,7 @@ export default {
         }
       }
     }
-    return () => [h("div",{},{default: () => dataCenter.r.map((item: any) => {//循环渲染
+    return () => [h("div",{style:{width: '100%', height: '100%', display: 'flex', flexWrap: 'wrap'}},{default: () => dataCenter.r.map((item: any) => {//循环渲染
       return renderList(item)
     })})]
   }

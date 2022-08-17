@@ -2,13 +2,13 @@
   <div class="editor-container">
     <div class="editor">
       <Toolbar
-        style="border-bottom: 1px solid #ccc; height: 30%"
+        style="border-bottom: 1px solid #ccc; height: 40px"
         :editor="editorRef"
         :defaultConfig="toolbarConfig"
         :mode="mode"
       />
       <Editor
-        style="height: 70%"
+        style="height: calc(100% - 40px)"
         v-model="valueHtml"
         :defaultConfig="editorConfig"
         :mode="mode"

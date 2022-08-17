@@ -55,13 +55,12 @@ export default {
     }
     // 属性
     const getAttributes = (tree: any): object =>{
-      const _attr = tree?.style ? { style: {...tree.style} } : {};
-      _attr.style?.width ? _attr.style.width += 'px' : '';
-      _attr.style?.height ? _attr.style.height += 'px' : '';
-      _attr.style?.left ? _attr.style.left += 'px' : '';
-      _attr.style?.right ? _attr.style.right += 'px' : '';
-      _attr.style?.top ? _attr.style.top += 'px' : '';
-      _attr.style?.bottom ? _attr.style.bottom += 'px' : '';
+      const _attr = tree?.style ? { style: {...tree.style}, dataCenter } : { dataCenter };
+      for (let item in _attr.style || {})
+        if (item.indexOf('margin') > -1 || item.indexOf('padding') > -1){
+          delete  _attr[item as keyof typeof _attr]
+        }
+
       // store.state.curComponent.attributes[addLabel.value] = useEval(code.value).bind(null, router)
       const attr = tree?.attributes ? tree.attributes: {};
       Object.assign(_attr, attr)
@@ -117,28 +116,6 @@ export default {
       // @ts-ignore
       dataCenter.r.push(item)
     }
-    const getShapeStyle = (style: any) => {
-      const result: any = {};
-      ['width', 'height', 'top', 'left', 'rotate'].forEach(attr => {
-        if (attr != 'rotate') {
-          result[attr] = `${style[attr]}`.indexOf('px') < 0 ? style[attr] + 'px' : style[attr]
-        } else {
-          result.transform = 'rotate(' + style[attr] + 'deg)'
-        }
-      })
-      return result
-    }
-  //   <Shape
-  //     v-for="(item, index) in componentData"
-  //     :key="item.id"
-  // :default-style="item.style"
-  // :style="getShapeStyle(item.style)"
-  // :active="item.id === (curComponent || {}).id"
-  // :element="item"
-  // :index="index"
-  // :class="{ lock: item.isLock }"
-  // @drop="handleDrop($event, item)"
-  //     >
     const handleDrop = (e: any, com: any) => {
       const index = store.state.dragIndex
       if (index && com.component === 'div') {
@@ -156,20 +133,20 @@ export default {
           for (let _dom of tree.children)
             children.push(renderList(_dom))
           return !dataCenter[tree.hidden as keyof typeof dataCenter] &&
-            [h(Shape, {style: getShapeStyle(tree.style), defaultStyle: tree.style, class: { lock: tree.isLock },
+            [h(Shape, {style: tree.style, defaultStyle: tree.style, class: { lock: tree.isLock },
               element: tree, active: tree.id === (store.state.curComponent || {}).id, onDrop: handleDrop.bind(null, event, tree)},
             {default: () => h(tree.component, getAttributes(tree),
             [dataCenter.hasOwnProperty(tree.text) ? dataCenter[tree.text as keyof typeof dataCenter] : tree.text, ...children])})]
         } else {
           return !dataCenter[tree.hidden as keyof typeof dataCenter] && [h(Shape,
-            {style: getShapeStyle(tree.style), defaultStyle: tree.style, class: { lock: tree.isLock }, element: tree
+            {style: tree.style, defaultStyle: tree.style, class: { lock: tree.isLock }, element: tree
               , active: tree.id === (store.state.curComponent || {}).id, onDrop: handleDrop.bind(null, event, tree)},
             {default: () => h(tree.component, getAttributes(tree),
             dataCenter.hasOwnProperty(tree.text) ? dataCenter[tree.text as keyof typeof dataCenter] : tree.text)})]
         }
       }
     }
-    return () => [h("div",{style:{width: '100%', height: '100%'}},{default: () => dataCenter.r.map((item: any) => {//循环渲染
+    return () => [h("div",{style:{width: '100%', height: '100%', display: 'flex',flexWrap: 'wrap'}},{default: () => dataCenter.r.map((item: any) => {//循环渲染
         return renderList(item)
       })})]
   }

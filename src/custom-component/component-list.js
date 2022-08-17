@@ -16,7 +16,9 @@ import RectShape from '@/custom-component/RectShape'
 import VButton from '@/custom-component/VButton'
 import VText from '@/custom-component/VText';
 import { defineAsyncComponent } from 'vue'
-
+import bkTable from '@/custom-component/bkTable';
+import bkForm from "@/custom-component/bkForm";
+import {JSONStringify} from '@/hooks/useJSON'
 // 编辑器左侧组件列表
 const list = [
   {
@@ -26,8 +28,8 @@ const list = [
     propValue: 'div',
     icon: 'm-div',
     style: {
-      width: 100,
-      height: 50,
+      width: '50%',
+      height: '10%',
       borderWidth: 1,
       borderColor: '',
       borderRadius: '',
@@ -39,7 +41,9 @@ const list = [
       color: '',
       backgroundColor: '#f2f2f2',
       display: 'flex',
-      flexWrap: 'nowrap'
+      flexWrap: 'wrap'
+    },
+    attributes: {
     },
     dataList: [{name: '_inputValue', value: ''}],
   },
@@ -50,8 +54,8 @@ const list = [
     propValue: 'span',
     icon: 'm-span',
     style: {
-      width: 100,
-      height: 50,
+      width: '100px',
+      height: '50px',
       borderWidth: 1,
       borderColor: '',
       borderRadius: '',
@@ -63,18 +67,18 @@ const list = [
       color: '',
       backgroundColor: '#f2f2f2',
     },
-    text: '按钮',
-    dataList: [{name: '_inputValue', value: ''}],
+    attributes: {
+    },
   },
   {
     id: 0,
     component: defineAsyncComponent(() => import('@/custom-component/VButton')),
     label: '按钮',
-    propValue: '按钮',
+    value: '按钮',
     icon: 'anniu',
     style: {
-      width: 100,
-      height: 50,
+      width: '100px',
+      height: '50px',
       borderWidth: 1,
       borderColor: '',
       borderRadius: '',
@@ -87,10 +91,9 @@ const list = [
       backgroundColor: '',
     },
     attributes: {
-      value: '_inputValue',
       onInput: ($event) => {},
       onClick: () => { alert('hellow!')},
-      propValue: '按钮',
+      value: '按钮',
     },
     text: '按钮',
     dataList: [{name: '_inputValue', value: ''}],
@@ -100,8 +103,8 @@ const list = [
     label: '图片',
     icon: 'img',
     style: {
-      width: 300,
-      height: 200,
+      width: '300px',
+      height: '200px',
       borderRadius: '',
     },
     attributes: {
@@ -117,8 +120,8 @@ const list = [
     label: '输入',
     icon: 'checkbox-weixuan',
     style: {
-      width: 200,
-      height:50,
+      width: '100px',
+      height: '50px',
       fontSize: 14,
       fontWeight: 500,
       lineHeight: '',
@@ -128,6 +131,73 @@ const list = [
       borderWidth: 1,
       backgroundColor: '',
       borderStyle: 'solid',
+      borderRadius: '',
+      verticalAlign: 'middle',
+    },
+    attributes: {
+      value: '_inputValue',
+      onInput: ($event) => {},
+      propValue: '&nbsp;',
+    },
+    text: '_inputValue',
+    dataList: [{name: '_inputValue', value: 'fwfef'}],
+  },
+  {
+    component: bkTable,
+    label: '表格',
+    icon: 'checkbox-weixuan',
+    style: {
+      width: '100%',
+      height: '100%',
+      fontSize: 14,
+      fontWeight: 500,
+      lineHeight: '',
+      letterSpacing: 0,
+      color: '',
+      borderWidth: 1,
+      backgroundColor: '',
+      borderRadius: '',
+      verticalAlign: 'middle',
+    },
+    attributes: {
+      value: '_inputValue',
+      onInput: ($event) => {},
+      propValue: '&nbsp;',
+      grid1: '_grid'
+    },
+    text: '_inputValue',
+    dataList: [{name: '_inputValue', value: 'fwfef'},{name: '_grid', value: {
+        border: true,
+        align: null,
+        columnConfig: {
+          resizable: true
+        },
+        columns: [
+          { type: 'seq', width: 50 },
+          { field: 'columnId', title: 'columnId' },
+          { field: 'createBy', title: 'createBy', showHeaderOverflow: true },
+          { field: 'description', title: 'description', showOverflow: true },
+          { field: 'marketPrice', title: 'marketPrice', showOverflow: true },
+          { field: 'name', title: 'name', showOverflow: true },
+          { field: 'saleMoney', title: 'saleMoney', showOverflow: true },
+        ],
+        data: []
+      }}],
+  },
+  {
+    component: bkForm,
+    label: '表单',
+    icon: 'checkbox-weixuan',
+    style: {
+      width: '100%',
+      height: '10%',
+      fontSize: 14,
+      fontWeight: 500,
+      lineHeight: '',
+      letterSpacing: 0,
+      color: '',
+      borderWidth: 1,
+      backgroundColor: '',
       borderRadius: '',
       verticalAlign: 'middle',
     },

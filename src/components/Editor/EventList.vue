@@ -60,6 +60,7 @@ export default {
       attr()
     }, { deep: true })
     const addAttr = () => {
+      debugger
       store.state.curComponent.attributes[addLabel.value] = code.value;
       attrShow.value = false;
     }

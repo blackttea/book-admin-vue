@@ -11,7 +11,6 @@ import { message } from 'ant-design-vue';
 const reqURL = HOST,
   header: object = {
     'Content-Type': 'application/json;charset=UTF-8',
-    'X-Requested-With': 'XMLHttpRequest',
   };
 class Abstract {
   private apiAxios({ baseURL = reqURL, headers = header, method, url, data, params, responseType }: AxiosRequest): Promise<CustomResponse> {

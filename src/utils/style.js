@@ -6,6 +6,8 @@ export const styleData = [
   {key: 'width', label: '宽'},
   {key: 'height', label: '高'},
   {key: 'color', label: '颜色'},
+  {key: 'padding', label: 'padding'},
+  {key: 'margin', label: 'margin'},
   {key: 'backgroundColor', label: '背景色'},
   {key: 'borderWidth', label: '边框宽度'},
   {key: 'borderStyle', label: '边框风格'},

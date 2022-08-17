@@ -298,28 +298,26 @@ export default {
       const rectInfo = this.editor.getBoundingClientRect();
       if (index) {
         const component = deepCopy(componentList[index])
-        component.style.top = e.clientY - rectInfo.y
-        component.style.left = e.clientX - rectInfo.x
         component.id = generateID()
         store.commit('addInto', {com, component})
       }
     },
 
-    getShapeStyle(style) {
-      const result = {};
-      ['width', 'height', 'top', 'left', 'rotate'].forEach(attr => {
-        if (attr != 'rotate') {
-          result[attr] = `${style[attr]}`.indexOf('px') < 0 ? style[attr] + 'px' : style[attr]
-        } else {
-          result.transform = 'rotate(' + style[attr] + 'deg)'
-        }
-      })
-      return result
-    },
+    // getShapeStyle(style) {
+    //   const result = {};
+    //   ['width', 'height', 'top', 'left', 'rotate'].forEach(attr => {
+    //     if (attr != 'rotate') {
+    //       result[attr] = `${style[attr]}`.indexOf('px') < 0 ? style[attr] + 'px' : style[attr]
+    //     } else {
+    //       result.transform = 'rotate(' + style[attr] + 'deg)'
+    //     }
+    //   })
+    //   return result
+    // },
 
-    getComponentStyle(style) {
-      return getStyle(style, ['top', 'left', 'width', 'height', 'rotate'])
-    },
+    // getComponentStyle(style) {
+    //   return getStyle(style, ['top', 'left', 'width', 'height', 'rotate'])
+    // },
 
     handleInput(element, value) {
       // 根据文本组件高度调整 shape 高度
@@ -353,10 +351,16 @@ export default {
   }
 
   .editor-container{
-    display: flex;
+    position: absolute;
     width: 100%;
     height: 100%;
-    background-color: rgb(255, 255, 255);
+    background-image: linear-gradient(
+        90deg,
+        rgba(33, 233, 252, 0.12) 1%,
+        rgba(0, 0, 0, 0) 5%
+    ),
+    linear-gradient(rgba(33, 233, 252, 0.12) 1%, rgba(0, 0, 0, 0) 5%);
+    background-size: 28px 28px;
   }
 }
 

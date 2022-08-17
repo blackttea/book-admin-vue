@@ -13,9 +13,7 @@ const useStorage = (type: string = 'local', operation: string, key='', value: an
     case "get":
       return storage.getItem(key) ? JSON.parse(storage.getItem(key) || '') : '';
     case "set":
-      if (typeof key === "string") {
-        storage.setItem(key, JSON.stringify(value))
-      }
+      storage.setItem(key, JSON.stringify(value))
       break
     case "clear":
       storage.clear();
