@@ -41,7 +41,7 @@
         </div>
       </div>
       <pad>
-        <div style="height: calc(100% - 85px);background-color: #333333">
+        <div style="height: calc(100% - 85px)">
           <bk-md-editor />
         </div>
       </pad>
@@ -212,15 +212,12 @@ export default defineComponent({
       }
     }
     const selectedMenu = (data: any) => {
-      console.log(code.value)
-      debugger
       let key = data?.keyPath[data?.keyPath.length - 1];
       getKey(menuTree, parseInt(key));
       breadcrumb.length = 0;
       let tem = '';
       for (let item of data?.keyPath || []) {
         const loc = menuList.findIndex((m) => { return item == m.id })
-        debugger
         breadcrumb.push(menuList[loc])
       }
     }
