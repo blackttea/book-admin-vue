@@ -42,6 +42,7 @@
       </div>
       <pad>
         <div style="height: calc(100% - 85px)">
+<!--          <bk-md-preview />-->
           <bk-md-editor />
         </div>
       </pad>
@@ -63,6 +64,7 @@ import subMenu from './subMenu.vue';
 import breadcrumb from './breadcrumb.vue';
 import { menu, md } from "@/views/menu/menu";
 import bkMdEditor from "@/components/bkMdEditor/index.vue";
+import bkMdPreview from "@/components/bkMdPreview/index.vue";
 
 export default defineComponent({
   components: {
@@ -74,7 +76,8 @@ export default defineComponent({
     CloseOutlined,
     subMenu,
     breadcrumb,
-    bkMdEditor
+    bkMdEditor,
+    bkMdPreview
   },
   setup() {
     const color: Array<string> = ['#FF0000', '#FF7F00', '#FFFF00', '#00FF00', '#00FFFF', '#0000FF', '#8B00FF'];

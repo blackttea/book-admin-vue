@@ -1,5 +1,5 @@
 <template>
-  <div class="bk-md-editor" v-if="type === 'editor'">
+  <div class="bk-md-editor">
     <vue-markdown-editor
       v-model="code"
       :include-level="[3, 4]"
@@ -71,9 +71,6 @@
       </a-form>
     </div>
   </div>
-  <div style="height: 500px; width: 100%;background-color: #fff;overflow: auto">
-    <v-md-preview :text="code" height="500px"/>
-  </div>
 </template>
 
 <script lang="ts">
@@ -87,9 +84,6 @@ import '@kangc/v-md-editor/lib/theme/style/vuepress.css';
 import Prism from 'prismjs';
 import {reactive, ref} from 'vue';
 // @ts-ignore
-import VMdPreview from '@kangc/v-md-editor/lib/preview';
-import '@kangc/v-md-editor/lib/style/preview.css';
-// @ts-ignore
 import githubTheme from '@kangc/v-md-editor/lib/theme/github.js';
 import '@kangc/v-md-editor/lib/theme/style/github.css';
 // @ts-ignore
@@ -98,11 +92,6 @@ import createLineNumbertPlugin from '@kangc/v-md-editor/lib/plugins/line-number/
 import createCopyCodePlugin from '@kangc/v-md-editor/lib/plugins/copy-code/index';
 // @ts-ignore
 import '@kangc/v-md-editor/lib/plugins/copy-code/copy-code.css';
-
-VMdPreview.use(vuepressTheme, {
-  Prism,
-}).use(createLineNumbertPlugin());
-VMdPreview.use(createCopyCodePlugin());
 
 VueMarkdownEditor.use(vuepressTheme, {
     Prism,
@@ -124,7 +113,6 @@ export default {
   },
   components: {
     VueMarkdownEditor,
-    VMdPreview,
     upImg,
     PlusOutlined
   },
