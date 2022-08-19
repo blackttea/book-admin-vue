@@ -62,7 +62,7 @@ import pad from '../../components/pad/index.vue';
 import subMenu from './subMenu.vue';
 import breadcrumb from './breadcrumb.vue';
 import { menu, md } from "@/views/menu/menu";
-import bkMdEditor from "@/components/bkMdEditor.vue";
+import bkMdEditor from "@/components/bkMdEditor/index.vue";
 
 export default defineComponent({
   components: {
